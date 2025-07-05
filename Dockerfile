@@ -80,9 +80,9 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:3000/ || exit 1
 
 # Labels for better container management
-LABEL org.opencontainers.image.title="MCP Admin"
+LABEL org.opencontainers.image.title="toWers"
 LABEL org.opencontainers.image.description="Self-hosted MCP administration interface"
-LABEL org.opencontainers.image.source="https://github.com/delorenj/mcp-admin"
-LABEL org.opencontainers.image.vendor="DeLoContainer"
+LABEL org.opencontainers.image.source="https://github.com/delorenj/toWers"
+LABEL org.opencontainers.image.vendor="DeLorenj"
 
 CMD ["/app/entrypoint.sh"]

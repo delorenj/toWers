@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Build script for MCP Admin container
+# Build script for toWers MCP Admin container
 
 set -e
 
-IMAGE_NAME="ghcr.io/delorenj/mcp-admin"
+IMAGE_NAME="ghcr.io/delorenj/towers"
 TAG="${1:-latest}"
 
-echo "🔨 Building MCP Admin container..."
+echo "🔨 Building toWers MCP Admin container..."
 echo "📦 Image: $IMAGE_NAME:$TAG"
 
 # Build the image
@@ -22,4 +22,4 @@ echo "📤 To push to registry:"
 echo "   docker push $IMAGE_NAME:$TAG"
 echo ""
 echo "🧪 To test the container:"
-echo "   docker run --rm -p 12005:3000 -e DATABASE_URL=your_db_url $IMAGE_NAME:$TAG"
+echo "   docker run --rm -p 12005:3000 --env-file .env $IMAGE_NAME:$TAG"
