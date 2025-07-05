@@ -1,0 +1,9 @@
+{
+  "sidebar": {
+    "toggle": "切换侧边栏",
+    "navigation": "导航",
+    "keyboard": {
+      "shortcut": "键盘快捷键：{{key}}"
+    }
+  }
+}

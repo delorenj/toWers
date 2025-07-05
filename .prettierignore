@@ -1,0 +1,10 @@
+tailwind.config.ts
+postcss.config.mjs
+next.config.mjs
+node_modules/*
+dist/*
+coverage/*
+.gitignore
+.prettierignore
+.husky
+pnpm-lock.yaml

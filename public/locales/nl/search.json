@@ -1,0 +1,56 @@
+{
+  "search": {
+    "title": "Zoeken",
+    "subtitle": "Zoek in alle inhoud",
+    "explorePlugins": "Verken Plugins",
+    "input": {
+      "placeholder": "Zoeken..."
+    },
+    "loading": "Zoeken laden...",
+    "noResults": "Geen resultaten gevonden",
+    "error": {
+      "general": "Fout bij het laden van zoekresultaten",
+      "profileNotFound": "Profiel niet gevonden. Selecteer een profiel om servers te delen.",
+      "missingShareId": "Kan delen niet ongedaan maken: Deel-informatie ontbreekt.",
+      "unshareFailed": "Server delen ongedaan maken mislukt"
+    },
+    "unshareSuccess": "{{name}} succesvol niet meer gedeeld",
+    "sort": "Sorteren",
+    "sortBy": "Sorteren op",
+    "sortOptions": {
+      "relevance": "Relevantie",
+      "popularity": "Populariteit",
+      "recent": "Meest recent",
+      "stars": "GitHub sterren"
+    },
+    "filter": "Filter",
+    "filterByTags": "Filteren op tags",
+    "noTagsAvailable": "Geen tags beschikbaar",
+    "clearFilters": "Filters wissen",
+    "clearAllFilters": "Alles wissen",
+    "noMatchingTags": "Geen resultaten komen overeen met de geselecteerde tags",
+    "noMatchingFilters": "Geen resultaten komen overeen met de geselecteerde filters",
+    "category": "Categorie",
+    "filterByCategory": "Filteren op categorie",
+    "noCategoriesAvailable": "Geen categorieën beschikbaar",
+    "allCategories": "Alle categorieën",
+    "categories": {
+      "LLM": "LLM",
+      "UTILITY": "Hulpprogramma",
+      "TOOL": "Tool",
+      "DATA": "Gegevenstoegang",
+      "CONNECTOR": "Connector",
+      "SEARCH": "Zoeken",
+      "CODE": "Code",
+      "IMAGE": "Afbeelding",
+      "AUDIO": "Audio",
+      "VIDEO": "Video",
+      "OTHER": "Overig"
+    },
+    "card": {
+      "install": "Installeren",
+      "installed": "Geïnstalleerd",
+      "rate": "Beoordelen"
+    }
+  }
+}
