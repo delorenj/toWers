@@ -1,0 +1,25 @@
+    services:
+      mcp-admin:
+        # Use pre-built image from GHCR (comment out to build locally)
+        image: ghcr.io/delorenj/towers:latest
+        
+        # Uncomment to build locally instead
+        # build:
+        #   context: .
+        #   dockerfile: Dockerfile
+        
+        container_name: mcp-admin
+        restart: unless-stopped
+        ports:
+          - "12005:3000"
+        env_file:
+          - .env.local  # Use local env file with your secrets
+        environment:
+          - NODE_ENV=production
+          - SENTRY_SUPPRESS_INSTRUMENTATION_FILE_WARNING=1
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+          interval: 30s
+          timeout: 10s
+          retries: 3
+          start_period: 30s
