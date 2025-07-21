@@ -37,7 +37,7 @@ export function UsersPage() {
     const [userDialogOpen, setUserDialogOpen] = useState(false);
     const [currentUserForEdit, setCurrentUserForEdit] = useState<User | null>(null);
 
-    // 获取用户列表
+    // Get user list
     const fetchUsers = async (page = 0, search = '') => {
         setLoading(true);
         try {
@@ -51,15 +51,15 @@ export function UsersPage() {
                 setUsers(response.data || []);
             } else {
                 toast({
-                    title: '获取用户列表失败',
-                    description: response.message || '未知错误',
+                    title: 'Failed to get user list',
+                    description: response.message || 'Unknown error',
                     variant: 'destructive'
                 });
             }
         } catch (error: any) {
             toast({
-                title: '获取用户列表失败',
-                description: error.message || '网络错误',
+                title: 'Failed to get user list',
+                description: error.message || 'Network error',
                 variant: 'destructive'
             });
         } finally {
@@ -71,7 +71,7 @@ export function UsersPage() {
         fetchUsers(currentPage, searchTerm);
     }, [currentPage]);
 
-    // 搜索处理
+    // Search handling
     const handleSearch = () => {
         setCurrentPage(0);
         fetchUsers(0, searchTerm);
@@ -83,7 +83,7 @@ export function UsersPage() {
         }
     };
 
-    // 删除用户
+    // Delete user
     const handleDeleteClick = (userId: number) => {
         setPendingDeleteId(userId);
         setDeleteDialogOpen(true);
@@ -119,7 +119,7 @@ export function UsersPage() {
         }
     };
 
-    // 设为管理员
+    // Promote to admin
     const handlePromoteToAdmin = async (username: string) => {
         try {
             const response = await api.post('/user/manage', {
@@ -149,7 +149,7 @@ export function UsersPage() {
         }
     };
 
-    // 设为普通用户
+    // Demote to regular user
     const handleDemoteToUser = async (username: string) => {
         try {
             const response = await api.post('/user/manage', {
@@ -179,7 +179,7 @@ export function UsersPage() {
         }
     };
 
-    // 切换用户状态
+    // Toggle user status
     const handleToggleStatus = async (username: string, currentStatus: number) => {
         const action = currentStatus === 1 ? 'disable' : 'enable';
         try {
@@ -210,7 +210,7 @@ export function UsersPage() {
         }
     };
 
-    // 获取角色显示文本
+    // Get role display text
     const getRoleText = (role: number) => {
         switch (role) {
             case 100: return t('usersPage.roles.superAdmin');
@@ -220,7 +220,7 @@ export function UsersPage() {
         }
     };
 
-    // 获取绑定状态
+    // Get binding status
     const getBindingStatus = (user: User) => {
         const bindings = [];
         if (user.github_id) bindings.push('GitHub');
@@ -261,7 +261,7 @@ export function UsersPage() {
                 </Button>
             </div>
 
-            {/* 搜索框 */}
+            {/* Search box */}
             <div className="flex gap-4 mb-6">
                 <div className="relative flex-grow">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -278,7 +278,7 @@ export function UsersPage() {
                 </Button>
             </div>
 
-            {/* 用户列表表格 */}
+            {/* User list table */}
             <div className="border rounded-lg">
                 <Table>
                     <TableHeader>
@@ -331,7 +331,7 @@ export function UsersPage() {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center space-x-2">
-                                            {/* 角色切换按钮 - 根据当前角色显示不同操作 */}
+                                            {/* Role toggle button - show different actions based on current role */}
                                             {user.role < 10 ? (
                                                 <Button
                                                     variant="outline"
@@ -380,7 +380,7 @@ export function UsersPage() {
                 </Table>
             </div>
 
-            {/* 分页控件 */}
+            {/* Pagination controls */}
             <div className="flex justify-between items-center">
                 <div className="text-sm text-muted-foreground">
                     {t('usersPage.showing')} {users.length} {t('usersPage.users')}
@@ -405,7 +405,7 @@ export function UsersPage() {
                 </div>
             </div>
 
-            {/* 删除确认对话框 */}
+            {/* Delete confirmation dialog */}
             <ConfirmDialog
                 isOpen={deleteDialogOpen}
                 onOpenChange={setDeleteDialogOpen}
@@ -417,7 +417,7 @@ export function UsersPage() {
                 confirmButtonVariant="destructive"
             />
 
-            {/* 用户新增/编辑对话框 */}
+            {/* User add/edit dialog */}
             <UserDialog
                 isOpen={userDialogOpen}
                 onClose={handleUserDialogClose}

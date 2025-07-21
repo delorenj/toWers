@@ -10,52 +10,52 @@ import (
 	"time"
 )
 
-// InstallationStatus 表示安装状态
+// InstallationStatus represents installation status
 type InstallationStatus string
 
 const (
-	// StatusPending 表示等待安装
+	// StatusPending indicates waiting for installation
 	StatusPending InstallationStatus = "pending"
-	// StatusInstalling 表示正在安装
+	// StatusInstalling indicates installation in progress
 	StatusInstalling InstallationStatus = "installing"
-	// StatusCompleted 表示安装完成
+	// StatusCompleted indicates installation completed
 	StatusCompleted InstallationStatus = "completed"
-	// StatusFailed 表示安装失败
+	// StatusFailed indicates installation failed
 	StatusFailed InstallationStatus = "failed"
 )
 
-// InstallationTask 表示一个安装任务
+// InstallationTask represents an installation task
 type InstallationTask struct {
-	ServiceID        int64                 // 服务ID
-	UserID           int64                 // 用户ID, 用于后续创建用户特定配置
-	PackageName      string                // 包名
-	PackageManager   string                // 包管理器
-	Version          string                // 版本
-	Command          string                // 命令
-	Args             []string              // 参数列表
-	EnvVars          map[string]string     // 环境变量
-	Status           InstallationStatus    // 状态
-	StartTime        time.Time             // 开始时间
-	EndTime          time.Time             // 结束时间
-	Output           string                // 输出信息
-	Error            string                // 错误信息
-	CompletionNotify chan InstallationTask // 完成通知
+	ServiceID        int64                 // Service ID
+	UserID           int64                 // User ID, for creating user-specific configuration later
+	PackageName      string                // Package name
+	PackageManager   string                // Package manager
+	Version          string                // Version
+	Command          string                // Command
+	Args             []string              // Arguments list
+	EnvVars          map[string]string     // Environment variables
+	Status           InstallationStatus    // Status
+	StartTime        time.Time             // Start time
+	EndTime          time.Time             // End time
+	Output           string                // Output information
+	Error            string                // Error information
+	CompletionNotify chan InstallationTask // Completion notification
 }
 
-// InstallationManager 管理安装任务
+// InstallationManager manages installation tasks
 type InstallationManager struct {
 	tasks      map[int64]*InstallationTask // ServiceID -> Task
 	tasksMutex sync.RWMutex
 }
 
-// 全局安装管理器
+// Global installation manager
 var (
 	globalInstallationManager      *InstallationManager
 	installationManagerInitialized bool
 	installationManagerMutex       sync.Mutex
 )
 
-// GetInstallationManager 获取全局安装管理器
+// GetInstallationManager gets the global installation manager
 func GetInstallationManager() *InstallationManager {
 	installationManagerMutex.Lock()
 	defer installationManagerMutex.Unlock()
@@ -70,7 +70,7 @@ func GetInstallationManager() *InstallationManager {
 	return globalInstallationManager
 }
 
-// GetTaskStatus 获取任务状态
+// GetTaskStatus gets task status
 func (m *InstallationManager) GetTaskStatus(serviceID int64) (*InstallationTask, bool) {
 	m.tasksMutex.RLock()
 	defer m.tasksMutex.RUnlock()
@@ -79,12 +79,12 @@ func (m *InstallationManager) GetTaskStatus(serviceID int64) (*InstallationTask,
 	return task, exists
 }
 
-// SubmitTask 提交安装任务
+// SubmitTask submits an installation task
 func (m *InstallationManager) SubmitTask(task InstallationTask) {
 	m.tasksMutex.Lock()
 	defer m.tasksMutex.Unlock()
 
-	// 如果已经有任务在运行，不重复提交
+	// If task is already running, don't submit duplicate
 	if existingTask, exists := m.tasks[task.ServiceID]; exists &&
 		(existingTask.Status == StatusPending || existingTask.Status == StatusInstalling) {
 		log.Printf("[SubmitTask] Task already exists for ServiceID=%d with status=%s, skipping duplicate submission",
@@ -92,26 +92,26 @@ func (m *InstallationManager) SubmitTask(task InstallationTask) {
 		return
 	}
 
-	// 初始化任务状态
+	// Initialize task status
 	task.Status = StatusPending
 	task.StartTime = time.Now()
 	task.CompletionNotify = make(chan InstallationTask, 1)
 
-	// 保存任务
+	// Save task
 	m.tasks[task.ServiceID] = &task
 
-	// 启动后台安装任务
+	// Start background installation task
 	go m.runInstallationTask(&task)
 }
 
-// runInstallationTask 运行安装任务
+// runInstallationTask runs installation task
 func (m *InstallationManager) runInstallationTask(task *InstallationTask) {
-	// 更新任务状态为安装中
+	// Update task status to installing
 	m.tasksMutex.Lock()
 	task.Status = StatusInstalling
 	m.tasksMutex.Unlock()
 
-	// 创建上下文
+	// Create context
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
@@ -140,10 +140,10 @@ func (m *InstallationManager) runInstallationTask(task *InstallationTask) {
 		}
 	default:
 		err = fmt.Errorf("unsupported package manager: %s", task.PackageManager)
-		output = fmt.Sprintf("不支持的包管理器: %s", task.PackageManager)
+		output = fmt.Sprintf("Unsupported package manager: %s", task.PackageManager)
 	}
 
-	// 更新任务状态
+	// Update task status
 	m.tasksMutex.Lock()
 	task.EndTime = time.Now()
 	task.Output = output
@@ -151,30 +151,30 @@ func (m *InstallationManager) runInstallationTask(task *InstallationTask) {
 	if err != nil {
 		task.Status = StatusFailed
 		task.Error = err.Error()
-		log.Printf("[InstallTask] 任务失败: ServiceID=%d, Package=%s, Error=%v", task.ServiceID, task.PackageName, err)
+		log.Printf("[InstallTask] Task failed: ServiceID=%d, Package=%s, Error=%v", task.ServiceID, task.PackageName, err)
 
-		// 新增：尝试删除因此次失败安装而在数据库中预先创建的服务记录
-		log.Printf("[InstallTask] 安装失败，尝试删除预创建的服务记录: ServiceID=%d", task.ServiceID)
+		// New: Try to delete the pre-created service record due to this failed installation
+		log.Printf("[InstallTask] Installation failed, attempting to delete pre-created service record: ServiceID=%d", task.ServiceID)
 		if deleteErr := model.DeleteService(task.ServiceID); deleteErr != nil {
-			log.Printf("[InstallTask] 删除服务记录失败 ServiceID=%d: %v. 原始安装错误: %v", task.ServiceID, deleteErr, err)
-			// 注意：即使删除失败，也应继续报告原始安装失败。
-			// 这里的删除失败是一个次要问题，主要问题是安装失败。
+			log.Printf("[InstallTask] Failed to delete service record ServiceID=%d: %v. Original installation error: %v", task.ServiceID, deleteErr, err)
+			// Note: Even if deletion fails, we should continue to report the original installation failure.
+			// The deletion failure here is a secondary issue, the main issue is the installation failure.
 		} else {
-			log.Printf("[InstallTask] 成功删除因安装失败而产生的服务记录: ServiceID=%d", task.ServiceID)
+			log.Printf("[InstallTask] Successfully deleted service record created due to installation failure: ServiceID=%d", task.ServiceID)
 		}
 	} else {
 		task.Status = StatusCompleted
-		log.Printf("[InstallTask] 任务完成: ServiceID=%d, Package=%s", task.ServiceID, task.PackageName)
-		// 更新数据库中的服务状态
+		log.Printf("[InstallTask] Task completed: ServiceID=%d, Package=%s", task.ServiceID, task.PackageName)
+		// Update service status in database
 		go m.updateServiceStatus(task, serverInfo)
 	}
 	m.tasksMutex.Unlock()
 
-	// 发送完成通知
+	// Send completion notification
 	task.CompletionNotify <- *task
 }
 
-// updateServiceStatus 更新服务状态
+// updateServiceStatus updates service status
 func (m *InstallationManager) updateServiceStatus(task *InstallationTask, serverInfo *MCPServerInfo) {
 	serviceToUpdate, err := model.GetServiceByID(task.ServiceID)
 	if err != nil {
@@ -274,7 +274,7 @@ func (m *InstallationManager) updateServiceStatus(task *InstallationTask, server
 		// Continue to attempt UserConfig saving if applicable, as DB update failure might be transient
 	}
 
-	// 确保安装完成后DefaultEnvsJSON正确设置（备用逻辑）
+	// Ensure DefaultEnvsJSON is properly set after installation (fallback logic)
 	if len(task.EnvVars) > 0 && serviceToUpdate.DefaultEnvsJSON == "" {
 		defaultEnvsJSON, err := json.Marshal(task.EnvVars)
 		if err != nil {
@@ -285,17 +285,17 @@ func (m *InstallationManager) updateServiceStatus(task *InstallationTask, server
 		}
 	}
 
-	// 注意：不再在安装时保存UserConfig，因为安装时的环境变量是服务默认配置
-	// UserConfig只在用户需要个人配置时保存
+	// Note: No longer save UserConfig during installation, as installation env vars are service default config
+	// UserConfig is only saved when user needs personal configuration
 
-	// 服务注册和客户端初始化现在由 proxy.ServiceManager 处理
-	// 在服务被启用时会自动注册到 ServiceManager 中
+	// Service registration and client initialization are now handled by proxy.ServiceManager
+	// Will be automatically registered to ServiceManager when service is enabled
 	log.Printf("[InstallationManager] Service %s (ID: %d) will be managed by ServiceManager when enabled", serviceToUpdate.Name, serviceToUpdate.ID)
 
 	log.Printf("[InstallationManager] Service processing completed for ID: %d, Name: %s", serviceToUpdate.ID, serviceToUpdate.Name)
 }
 
-// CleanupTask 清理任务
+// CleanupTask cleans up task
 func (m *InstallationManager) CleanupTask(serviceID int64) {
 	m.tasksMutex.Lock()
 	defer m.tasksMutex.Unlock()
@@ -303,7 +303,7 @@ func (m *InstallationManager) CleanupTask(serviceID int64) {
 	delete(m.tasks, serviceID)
 }
 
-// GetAllTasks 获取所有任务
+// GetAllTasks gets all tasks
 func (m *InstallationManager) GetAllTasks() []InstallationTask {
 	m.tasksMutex.RLock()
 	defer m.tasksMutex.RUnlock()

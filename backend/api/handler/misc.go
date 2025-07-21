@@ -18,26 +18,8 @@ func GetStatus(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "",
-		"data": gin.H{
-			"version":            common.Version,
-			"start_time":         common.StartTime,
-			"email_verification": common.GetEmailVerificationEnabled(),
-			"github_oauth":       common.GetGitHubOAuthEnabled(),
-			"github_client_id":   common.GetGitHubClientId(),
-			"google_oauth":       common.GetGoogleOAuthEnabled(),
-			"google_client_id":   common.GetGoogleClientId(),
-			"system_name":        common.GetSystemName(),
-			"home_page_link":     common.GetHomePageLink(),
-			"footer_html":        common.GetFooter(),
-			"wechat_qrcode":      common.GetWeChatAccountQRCodeImageURL(),
-			"wechat_login":       common.GetWeChatAuthEnabled(),
-			"server_address":     common.GetServerAddress(),
-			"turnstile_check":    common.GetTurnstileCheckEnabled(),
-			"turnstile_site_key": common.GetTurnstileSiteKey(),
-			"current_language":   lang,
-		},
+		"success": false,
+		"message": "Invalid parameters",
 	})
 	return
 }
@@ -76,16 +58,16 @@ func SendEmailVerification(c *gin.Context) {
 	if model.IsEmailAlreadyTaken(email) {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "邮箱地址已被占用",
+			"message": "Email address is already taken",
 		})
 		return
 	}
 	code := common.GenerateVerificationCode(6)
 	common.RegisterVerificationCodeWithKey(email, code, common.EmailVerificationPurpose)
-	subject := fmt.Sprintf("%s邮箱验证邮件", common.GetSystemName())
-	content := fmt.Sprintf("<p>您好，你正在进行%s邮箱验证。</p>"+
-		"<p>您的验证码为: <strong>%s</strong></p>"+
-		"<p>验证码 %d 分钟内有效，如果不是本人操作，请忽略。</p>", common.GetSystemName(), code, common.VerificationValidMinutes)
+	subject := fmt.Sprintf("%s Email Verification", common.GetSystemName())
+	content := fmt.Sprintf("<p>Hello, you are verifying your email for %s.</p>"+
+		"<p>Your verification code is: <strong>%s</strong></p>"+
+		"<p>The code is valid for %d minutes. If this wasn't you, please ignore this email.</p>", common.GetSystemName(), code, common.VerificationValidMinutes)
 	err := common.SendEmail(subject, email, content)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -113,17 +95,17 @@ func SendPasswordResetEmail(c *gin.Context) {
 	if !model.IsEmailAlreadyTaken(email) {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "该邮箱地址未注册",
+			"message": "This email address is not registered",
 		})
 		return
 	}
 	code := common.GenerateVerificationCode(0)
 	common.RegisterVerificationCodeWithKey(email, code, common.PasswordResetPurpose)
 	link := fmt.Sprintf("%s/user/reset?email=%s&token=%s", common.GetServerAddress(), email, code)
-	subject := fmt.Sprintf("%s密码重置", common.GetSystemName())
-	content := fmt.Sprintf("<p>您好，你正在进行%s密码重置。</p>"+
-		"<p>点击<a href='%s'>此处</a>进行密码重置。</p>"+
-		"<p>重置链接 %d 分钟内有效，如果不是本人操作，请忽略。</p>", common.GetSystemName(), link, common.VerificationValidMinutes)
+	subject := fmt.Sprintf("%s Password Reset", common.GetSystemName())
+	content := fmt.Sprintf("<p>Hello, you are resetting your password for %s.</p>"+
+		"<p>Click <a href='%s'>here</a> to reset your password.</p>"+
+		"<p>The reset link is valid for %d minutes. If this wasn't you, please ignore this email.</p>", common.GetSystemName(), link, common.VerificationValidMinutes)
 	err := common.SendEmail(subject, email, content)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -157,7 +139,7 @@ func ResetPassword(c *gin.Context) {
 	if !common.VerifyCodeWithKey(req.Email, req.Token, common.PasswordResetPurpose) {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "重置链接非法或已过期",
+			"message": "Reset link is invalid or has expired",
 		})
 		return
 	}

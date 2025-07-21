@@ -34,7 +34,7 @@ const AppLayout = () => {
   const location = useLocation()
   const { currentUser, logout, isLoading } = useAuth()
   const { t } = useTranslation()
-  // const navigate = useNavigate() // 暂时未使用
+  // const navigate = useNavigate() // Currently unused
 
   const NavLink = ({ to, children, isTopNav }: { to: string, children: React.ReactNode, isTopNav?: boolean }) => {
     const isActive = location.pathname === to || (to === '/' && location.pathname === '/dashboard')
@@ -117,7 +117,7 @@ const AppLayout = () => {
               <BarChart className={`h-4 w-4 ${location.pathname.startsWith('/analytics') ? 'text-primary' : 'text-muted-foreground'}`} />
               <span className={`${location.pathname.startsWith('/analytics') ? 'text-primary' : 'text-muted-foreground'}`}>{t('nav.analytics')}</span>
             </NavLink>
-            {/* 用户管理 - 仅管理员可见 */}
+            {/* User management - only visible to admins */}
             {currentUser && currentUser.role && currentUser.role >= 10 && (
               <NavLink to="/users">
                 <Users className={`h-4 w-4 ${location.pathname.startsWith('/users') ? 'text-primary' : 'text-muted-foreground'}`} />
@@ -189,12 +189,12 @@ const AppContent = () => {
   const { isLoading: authIsLoading } = useAuth()
 
   useEffect(() => {
-    // 订阅toast事件
+    // Subscribe to toast events
     const unsubscribe = toastEmitter.subscribe((toastData) => {
       toast(toastData)
     })
 
-    // 清理订阅
+    // Clean up subscription
     return () => {
       unsubscribe()
     }
@@ -240,7 +240,7 @@ function App() {
 
 export default App
 
-// 权限验证组件
+// Private route component for authentication
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { token, isLoading } = useAuth()
   const location = useLocation()

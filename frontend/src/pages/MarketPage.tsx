@@ -10,17 +10,17 @@ export function MarketPage() {
         clearSelectedService
     } = useMarketStore();
 
-    // 查看服务详情
+    // View service details
     const viewServiceDetails = (serviceId: string) => {
         selectService(serviceId);
     };
 
-    // 返回市场页面
+    // Go back to marketplace
     const goBackToMarketplace = () => {
         clearSelectedService();
     };
 
-    // 根据是否选择了服务显示不同的组件
+    // Display different components based on whether a service is selected
     return (
         <div className="w-full">
             {selectedService ? (

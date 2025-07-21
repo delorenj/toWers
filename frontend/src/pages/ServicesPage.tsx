@@ -42,7 +42,7 @@ export function ServicesPage() {
 
     const hasFetched = useRef(false);
 
-    // 检查用户是否是管理员(role >= 10)
+    // Check if user is admin (role >= 10)
     const isAdmin = currentUser?.role && currentUser.role >= 10;
 
     useEffect(() => {
@@ -128,7 +128,7 @@ export function ServicesPage() {
 
     const handleToggleService = async (serviceId: string) => {
         if (togglingServices.has(serviceId)) {
-            return; // 防止重复点击
+            return; // Prevent duplicate clicks
         }
 
         setTogglingServices(prev => new Set(prev).add(serviceId));
@@ -148,7 +148,7 @@ export function ServicesPage() {
 
     const handleCheckServiceHealth = async (serviceId: string) => {
         if (checkingHealthServices.has(serviceId)) {
-            return; // 防止重复点击
+            return; // Prevent duplicate clicks
         }
 
         setCheckingHealthServices(prev => new Set(prev).add(serviceId));
@@ -167,7 +167,7 @@ export function ServicesPage() {
     };
 
     const pollInstallationStatus = async (serviceId: string, serviceName: string) => {
-        const maxAttempts = 30; // 最多轮询30次（约5分钟）
+        const maxAttempts = 30; // Maximum 30 polling attempts (about 5 minutes)
         let attempts = 0;
 
         const poll = async () => {
@@ -183,7 +183,7 @@ export function ServicesPage() {
                             title: t('customServiceModal.messages.installationSuccess'),
                             description: t('customServiceModal.messages.installationSuccessDescription', { serviceName })
                         });
-                        fetchInstalledServices(); // 刷新列表
+                        fetchInstalledServices(); // Refresh list
                         return;
                     } else if (status === 'failed') {
                         toast({
@@ -196,9 +196,9 @@ export function ServicesPage() {
                         });
                         return;
                     } else if (status === 'installing' || status === 'pending') {
-                        // 继续轮询
+                        // Continue polling
                         if (attempts < maxAttempts) {
-                            setTimeout(poll, 10000); // 10秒后再次检查
+                            setTimeout(poll, 10000); // Check again after 10 seconds
                         } else {
                             toast({
                                 title: t('customServiceModal.messages.installationTimeout'),
@@ -210,7 +210,7 @@ export function ServicesPage() {
                     }
                 }
 
-                // 默认情况下继续轮询
+                // Continue polling by default
                 if (attempts < maxAttempts) {
                     setTimeout(poll, 10000);
                 } else {
@@ -223,7 +223,7 @@ export function ServicesPage() {
             } catch (error: any) {
                 console.error('Poll installation status error:', error);
                 if (attempts < maxAttempts) {
-                    setTimeout(poll, 10000); // 出错时也继续尝试
+                    setTimeout(poll, 10000); // Continue trying on error
                 } else {
                     toast({
                         title: t('customServiceModal.messages.statusCheckFailed'),
@@ -234,7 +234,7 @@ export function ServicesPage() {
             }
         };
 
-        // 开始轮询
+        // Start polling
         poll();
     };
 
@@ -308,35 +308,35 @@ export function ServicesPage() {
 
             if (res.success) {
                 if (serviceData.type === 'stdio') {
-                    // stdio 服务通过 install_or_add_service API，需要等待安装完成
+                    // stdio services use install_or_add_service API, need to wait for installation to complete
                     toast({
                         title: t('customServiceModal.messages.installationSubmitted'),
                         description: t('customServiceModal.messages.installationSubmittedDescription', { serviceName: serviceData.name })
                     });
 
-                    // 轮询安装状态
+                    // Poll installation status
                     const serviceId = res.data?.mcp_service_id;
                     if (serviceId) {
                         pollInstallationStatus(serviceId, serviceData.name);
                     }
-                    // 对于 stdio 服务，立即关闭模态框，因为轮询会处理后续状态
+                    // For stdio services, close modal immediately as polling will handle subsequent status
                     setCustomServiceModalOpen(false);
                 } else {
-                    // sse 和 streamableHttp 服务直接创建完成
+                    // sse and streamableHttp services are created directly
                     toast({
                         title: t('customServiceModal.messages.createSuccess'),
                         description: t('customServiceModal.messages.createSuccessDescription', { serviceName: serviceData.name })
                     });
-                    // 延迟刷新列表，等待服务注册完成
+                    // Delay list refresh to wait for service registration to complete
                     setTimeout(async () => {
                         await fetchInstalledServices();
-                        // 确保列表刷新完成后再关闭模态框
+                        // Ensure list refresh is complete before closing modal
                         setCustomServiceModalOpen(false);
                     }, 1000);
                 }
                 return res.data;
             } else {
-                throw new Error(res.message || '创建失败');
+                throw new Error(res.message || 'Creation failed');
             }
         } catch (error: any) {
             // Extract the actual error message from the API response
@@ -367,7 +367,7 @@ export function ServicesPage() {
         }
     };
 
-    // 渲染列表视图
+    // Render list view
     const renderListView = (services: ServiceType[]) => {
         if (services.length === 0) {
             return (
@@ -460,7 +460,7 @@ export function ServicesPage() {
         );
     };
 
-    // 渲染网格视图
+    // Render grid view
     const renderGridView = (services: ServiceType[]) => {
         if (services.length === 0) {
             return (
@@ -559,7 +559,7 @@ export function ServicesPage() {
                     <p className="text-muted-foreground mt-1">{t('services.manageAndConfigure')}</p>
                 </div>
                 <div className="flex items-center space-x-2">
-                    {/* 视图切换按钮 */}
+                    {/* View toggle buttons */}
                     <div className="flex items-center border rounded-md">
                         <Button
                             variant={viewMode === 'grid' ? 'default' : 'ghost'}

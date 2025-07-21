@@ -8,13 +8,13 @@ import (
 	"github.com/burugo/thing/drivers/db/sqlite"
 )
 
-// 全局变量用于兼容旧代码，后续可逐步移除
+// Global variables for compatibility with old code, can be gradually removed
 // var DB *gorm.DB
 
 func init() {}
 
 func createRootAccountIfNeed() error {
-	// 检查是否有用户，无则创建 root 用户
+	// Check if any users exist, if not create root user
 	userThing, err := thing.Use[*User]()
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func createRootAccountIfNeed() error {
 		common.SysLog("no user exists, create a root user for you: username is root, password is 123456")
 		rootUser := &User{
 			Username:    "root",
-			Password:    "123456", // 直接使用明文密码，让Insert方法来处理哈希
+			Password:    "123456", // Use plain text password, let Insert method handle hashing
 			Role:        common.RoleRootUser,
 			Status:      common.UserStatusEnabled,
 			DisplayName: "Root User",
@@ -91,6 +91,6 @@ func InitDB() (err error) {
 }
 
 func CloseDB() error {
-	// Thing ORM 不需要显式关闭 DB，若后续有需要可补充
+	// Thing ORM doesn't need explicit DB close, can be added later if needed
 	return nil
 }

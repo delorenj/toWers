@@ -176,7 +176,7 @@ export function ServiceDetails({ onBack }: { onBack: () => void }) {
         }
     };
 
-    // 卸载服务
+    // Uninstall service
     const handleUninstall = async () => {
         if (!selectedService || typeof selectedService.installed_service_id !== 'number') {
             toast({
@@ -187,7 +187,7 @@ export function ServiceDetails({ onBack }: { onBack: () => void }) {
             return;
         }
 
-        // 显示确认对话框
+        // Show confirmation dialog
         if (window.confirm(`Are you sure you want to uninstall ${selectedService.name}?`)) {
             try {
                 await uninstallService(selectedService.installed_service_id); // Use numeric ID and wait for completion

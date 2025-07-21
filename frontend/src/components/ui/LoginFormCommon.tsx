@@ -49,8 +49,8 @@ export function LoginFormCommon({ onSuccess, isDialogMode }: LoginFormCommonProp
         if (!oauthConfig.github_oauth || !oauthConfig.github_client_id) {
             toast({
                 variant: "destructive",
-                title: "GitHub OAuth 未配置",
-                description: "请联系管理员配置 GitHub OAuth"
+                title: "GitHub OAuth Not Configured",
+                description: "Please contact administrator to configure GitHub OAuth"
             });
             return;
         }
@@ -64,8 +64,8 @@ export function LoginFormCommon({ onSuccess, isDialogMode }: LoginFormCommonProp
         if (!oauthConfig.google_oauth || !oauthConfig.google_client_id) {
             toast({
                 variant: "destructive",
-                title: "Google OAuth 未配置",
-                description: "请联系管理员配置 Google OAuth"
+                title: "Google OAuth Not Configured",
+                description: "Please contact administrator to configure Google OAuth"
             });
             return;
         }
@@ -80,8 +80,8 @@ export function LoginFormCommon({ onSuccess, isDialogMode }: LoginFormCommonProp
         if (!username || !password) {
             toast({
                 variant: "destructive",
-                title: "输入错误",
-                description: "用户名和密码不能为空。"
+                title: "Input Error",
+                description: "Username and password cannot be empty."
             });
             return;
         }
@@ -94,26 +94,26 @@ export function LoginFormCommon({ onSuccess, isDialogMode }: LoginFormCommonProp
                     localStorage.setItem('refresh_token', apiResponse.data.refresh_token);
                 }
                 toast({
-                    title: "登录成功",
-                    description: "欢迎回来！"
+                    title: "Login Successful",
+                    description: "Welcome back!"
                 });
                 onSuccess();
             } else {
-                const message = apiResponse?.message || "登录失败，请检查用户名和密码。";
+                const message = apiResponse?.message || "Login failed, please check your username and password.";
                 toast({
                     variant: "destructive",
-                    title: "登录失败",
+                    title: "Login Failed",
                     description: message
                 });
             }
         } catch (error: unknown) {
-            let message = "登录请求失败，请稍后重试。";
+            let message = "Login request failed, please try again later.";
             if (error instanceof Error) {
                 message = (error as any).response?.data?.message || error.message;
             }
             toast({
                 variant: "destructive",
-                title: "登录错误",
+                title: "Login Error",
                 description: message
             });
         } finally {
