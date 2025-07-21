@@ -3,7 +3,7 @@ import { LoginFormCommon } from '@/components/ui/LoginFormCommon';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    // 登录成功后跳转首页
+    // Navigate to home page after successful login
     const handlePageSuccess = () => {
         navigate('/');
     };

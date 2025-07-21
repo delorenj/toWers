@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-// import { useAuth } from '@/contexts/AuthContext'; // 暂时未使用
+// import { useAuth } from '@/contexts/AuthContext'; // Currently unused
 import { Eye, EyeOff, RefreshCw, Github, User, Lock } from 'lucide-react';
 import api, { APIResponse } from '@/utils/api';
 import type { PageOutletContext } from '../App';
@@ -27,18 +27,18 @@ interface UserInfo {
 
 export function ProfilePage() {
     useOutletContext<PageOutletContext>();
-    // const { currentUser } = useAuth(); // 暂时未使用
+    // const { currentUser } = useAuth(); // Currently unused
     const { toast } = useToast();
     const { t } = useTranslation();
 
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
     const [loading, setLoading] = useState(true);
     const [showApiKey, setShowApiKey] = useState(false);
-    // const [editMode, setEditMode] = useState(true); // 不再需要编辑模式
+    // const [editMode, setEditMode] = useState(true); // Edit mode no longer needed
     const [saving, setSaving] = useState(false);
     const [refreshingToken, setRefreshingToken] = useState(false);
 
-    // 表单数据
+    // Form data
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -48,7 +48,7 @@ export function ProfilePage() {
         confirmPassword: ''
     });
 
-    // 获取用户详细信息
+    // Get user details
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -78,7 +78,7 @@ export function ProfilePage() {
         fetchUserInfo();
     }, [toast]);
 
-    // 判断登录方式
+    // Determine login method
     const getLoginMethod = () => {
         if (!userInfo) return 'password';
         if (userInfo.github_id) return 'github';
@@ -90,14 +90,14 @@ export function ProfilePage() {
     const loginMethod = getLoginMethod();
     const isOAuthUser = loginMethod !== 'password';
 
-    // 格式化显示的 API Key
+    // Format displayed API Key
     const formatApiKey = (token: string) => {
         if (!token) return '';
         if (showApiKey) return token;
         return token.substring(0, 8) + '••••••••••••••••' + token.substring(token.length - 4);
     };
 
-    // 修改密码
+    // Change password
     const handleChangePassword = async () => {
         if (formData.newPassword !== formData.confirmPassword) {
             toast({
@@ -127,7 +127,7 @@ export function ProfilePage() {
                     confirmPassword: ''
                 }));
             } else {
-                // 处理后端返回的错误信息
+                // Handle backend error messages
                 let errorMessage = t('profile.messages.passwordChangeFailed');
                 if (response.message === "current_password_incorrect") {
                     errorMessage = t('profile.messages.currentPasswordIncorrect');
@@ -155,7 +155,7 @@ export function ProfilePage() {
         }
     };
 
-    // 刷新 API Key
+    // Refresh API Key
     const handleRefreshApiKey = async () => {
         setRefreshingToken(true);
         try {
@@ -178,7 +178,7 @@ export function ProfilePage() {
         }
     };
 
-    // 保存个人信息
+    // Save profile information
     const handleSaveProfile = async () => {
         setSaving(true);
         try {
@@ -263,7 +263,7 @@ export function ProfilePage() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-                {/* 个人信息卡片 - OAuth 用户隐藏 */}
+                {/* Personal information card - Hidden for OAuth users */}
                 {!isOAuthUser && (
                     <Card>
                         <CardHeader>
@@ -345,7 +345,7 @@ export function ProfilePage() {
                     </Card>
                 )}
 
-                {/* API Key 管理卡片 */}
+                {/* API Key management card */}
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -399,7 +399,7 @@ export function ProfilePage() {
                 </Card>
             </div>
 
-            {/* 密码修改卡片（仅限账号密码登录用户） */}
+            {/* Password change card (only for password login users) */}
             {!isOAuthUser && (
                 <Card>
                     <CardHeader>

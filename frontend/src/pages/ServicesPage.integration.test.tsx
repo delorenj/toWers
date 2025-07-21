@@ -85,15 +85,15 @@ describe('ServicesPage Integration', () => {
         render(<ServicesPage />, { withRouter: true })
 
         // Find and click uninstall button
-        const uninstallButton = screen.getByTitle('卸载服务')
+        const uninstallButton = screen.getByTitle('Uninstall Service')
         fireEvent.click(uninstallButton)
 
         // Confirm dialog should appear
-        expect(screen.getByText('确认卸载')).toBeInTheDocument()
-        expect(screen.getByText('确定要卸载此服务吗？这将移除所有相关配置。')).toBeInTheDocument()
+        expect(screen.getByText('Confirm Uninstall')).toBeInTheDocument()
+        expect(screen.getByText('Are you sure you want to uninstall this service? This will remove all related configurations.')).toBeInTheDocument()
 
         // Click confirm button
-        const confirmButton = screen.getByRole('button', { name: '卸载' })
+        const confirmButton = screen.getByRole('button', { name: 'Uninstall' })
         fireEvent.click(confirmButton)
 
         // Verify uninstall service was called and success toast was shown
@@ -119,11 +119,11 @@ describe('ServicesPage Integration', () => {
         render(<ServicesPage />, { withRouter: true })
 
         // Click uninstall button
-        const uninstallButton = screen.getByTitle('卸载服务')
+        const uninstallButton = screen.getByTitle('Uninstall Service')
         fireEvent.click(uninstallButton)
 
         // Confirm uninstall
-        const confirmButton = screen.getByRole('button', { name: '卸载' })
+        const confirmButton = screen.getByRole('button', { name: 'Uninstall' })
         fireEvent.click(confirmButton)
 
         // Verify error toast was shown
@@ -232,7 +232,7 @@ describe('ServicesPage Integration', () => {
         const uninstallButtons = screen.getAllByTitle('卸载服务')
         fireEvent.click(uninstallButtons[0])
 
-        const confirmButton = screen.getByRole('button', { name: '卸载' })
+        const confirmButton = screen.getByRole('button', { name: 'Uninstall' })
         fireEvent.click(confirmButton)
 
         await waitFor(() => {
@@ -261,7 +261,7 @@ describe('ServicesPage Integration', () => {
         fireEvent.click(addButton)
 
         // This test previously expected direct navigation. Now, clicking "Add Service" opens a dropdown.
-        // We need to find the "自定义安装" (Custom Install) item in the dropdown and click it.
+        // We need to find the "Custom Install" item in the dropdown and click it.
         // Then, we would assert that the custom service modal opens.
         // For now, let's just assert the Add Service button is present.
         expect(addButton).toBeInTheDocument()

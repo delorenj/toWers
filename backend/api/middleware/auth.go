@@ -51,7 +51,7 @@ func authHelper(c *gin.Context, minRole int) {
 	if status.(int) == common.UserStatusDisabled {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "用户已被封禁",
+			"message": "Unauthorized operation, invalid token",
 		})
 		c.Abort()
 		return
@@ -59,7 +59,7 @@ func authHelper(c *gin.Context, minRole int) {
 	if role.(int) < minRole {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "无权进行此操作，权限不足",
+			"message": "Unauthorized operation, insufficient permissions",
 		})
 		c.Abort()
 		return
@@ -137,7 +137,7 @@ func JWTAuth() gin.HandlerFunc {
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"success": false,
-				"message": "Authorization header is required",
+				"message": "Unauthorized operation, not logged in or invalid token",
 			})
 			c.Abort()
 			return
@@ -300,7 +300,7 @@ func TokenOnlyAuth() gin.HandlerFunc {
 		if user.Status != common.UserStatusEnabled {
 			c.JSON(http.StatusOK, gin.H{
 				"success": false,
-				"message": "用户已被封禁",
+				"message": "User has been banned",
 			})
 			c.Abort()
 			return

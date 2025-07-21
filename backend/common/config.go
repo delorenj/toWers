@@ -1,111 +1,111 @@
 package common
 
-// GetGitHubClientId 获取GitHub客户端ID
+// GetGitHubClientId gets GitHub client ID
 func GetGitHubClientId() string {
 	return OptionMap["GitHubClientId"]
 }
 
-// GetGitHubClientSecret 获取GitHub客户端密钥
+// GetGitHubClientSecret gets GitHub client secret
 func GetGitHubClientSecret() string {
 	return OptionMap["GitHubClientSecret"]
 }
 
-// GetGitHubOAuthEnabled 获取GitHub OAuth是否启用
+// GetGitHubOAuthEnabled gets whether GitHub OAuth is enabled
 func GetGitHubOAuthEnabled() bool {
 	return OptionMap["GitHubOAuthEnabled"] == "true"
 }
 
-// GetGoogleClientId 获取Google客户端ID
+// GetGoogleClientId gets Google client ID
 func GetGoogleClientId() string {
 	return OptionMap["GoogleClientId"]
 }
 
-// GetGoogleClientSecret 获取Google客户端密钥
+// GetGoogleClientSecret gets Google client secret
 func GetGoogleClientSecret() string {
 	return OptionMap["GoogleClientSecret"]
 }
 
-// GetGoogleOAuthEnabled 获取Google OAuth是否启用
+// GetGoogleOAuthEnabled gets whether Google OAuth is enabled
 func GetGoogleOAuthEnabled() bool {
 	return OptionMap["GoogleOAuthEnabled"] == "true"
 }
 
-// GetServerAddress 获取服务器地址
+// GetServerAddress gets server address
 func GetServerAddress() string {
 	return OptionMap["ServerAddress"]
 }
 
-// GetSystemName 获取系统名称
+// GetSystemName gets system name
 func GetSystemName() string {
 	return OptionMap["SystemName"]
 }
 
-// GetFooter 获取页脚信息
+// GetFooter gets footer information
 func GetFooter() string {
 	return OptionMap["Footer"]
 }
 
-// GetHomePageLink 获取首页链接
+// GetHomePageLink gets homepage link
 func GetHomePageLink() string {
 	return OptionMap["HomePageLink"]
 }
 
-// GetRegisterEnabled 获取注册是否启用
+// GetRegisterEnabled gets whether registration is enabled
 func GetRegisterEnabled() bool {
 	return OptionMap["RegisterEnabled"] == "true"
 }
 
-// GetEmailVerificationEnabled 获取邮箱验证是否启用
+// GetEmailVerificationEnabled gets whether email verification is enabled
 func GetEmailVerificationEnabled() bool {
 	return OptionMap["EmailVerificationEnabled"] == "true"
 }
 
-// GetWeChatAuthEnabled 获取微信认证是否启用
+// GetWeChatAuthEnabled gets whether WeChat authentication is enabled
 func GetWeChatAuthEnabled() bool {
 	return OptionMap["WeChatAuthEnabled"] == "true"
 }
 
-// GetWeChatServerAddress 获取微信服务器地址
+// GetWeChatServerAddress gets WeChat server address
 func GetWeChatServerAddress() string {
 	return OptionMap["WeChatServerAddress"]
 }
 
-// GetWeChatServerToken 获取微信服务器令牌
+// GetWeChatServerToken gets WeChat server token
 func GetWeChatServerToken() string {
 	return OptionMap["WeChatServerToken"]
 }
 
-// GetWeChatAccountQRCodeImageURL 获取微信账号二维码图片URL
+// GetWeChatAccountQRCodeImageURL gets WeChat account QR code image URL
 func GetWeChatAccountQRCodeImageURL() string {
 	return OptionMap["WeChatAccountQRCodeImageURL"]
 }
 
-// GetTurnstileCheckEnabled 获取Turnstile检查是否启用
+// GetTurnstileCheckEnabled gets whether Turnstile check is enabled
 func GetTurnstileCheckEnabled() bool {
 	return OptionMap["TurnstileCheckEnabled"] == "true"
 }
 
-// GetTurnstileSiteKey 获取Turnstile站点密钥
+// GetTurnstileSiteKey gets Turnstile site key
 func GetTurnstileSiteKey() string {
 	return OptionMap["TurnstileSiteKey"]
 }
 
-// GetTurnstileSecretKey 获取Turnstile秘密密钥
+// GetTurnstileSecretKey gets Turnstile secret key
 func GetTurnstileSecretKey() string {
 	return OptionMap["TurnstileSecretKey"]
 }
 
-// GetSMTPServer 获取SMTP服务器
+// GetSMTPServer gets SMTP server
 func GetSMTPServer() string {
 	return OptionMap["SMTPServer"]
 }
 
-// GetSMTPAccount 获取SMTP账号
+// GetSMTPAccount gets SMTP account
 func GetSMTPAccount() string {
 	return OptionMap["SMTPAccount"]
 }
 
-// GetSMTPToken 获取SMTP令牌
+// GetSMTPToken gets SMTP token
 func GetSMTPToken() string {
 	return OptionMap["SMTPToken"]
 }

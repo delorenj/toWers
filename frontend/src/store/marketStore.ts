@@ -65,7 +65,7 @@ export interface InstallTask {
     taskId?: string;
 }
 
-// 卸载任务状态
+// Uninstall task status
 export interface UninstallTask {
     status: 'idle' | 'uninstalling' | 'error';
     error?: string;
@@ -91,7 +91,7 @@ interface MarketState {
 
     // 安装任务
     installTasks: Record<string, InstallTask>;
-    // 卸载任务状态
+    // Uninstall task status
     uninstallTasks: Record<string, UninstallTask>;
 
     // 操作方法

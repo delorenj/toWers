@@ -6,17 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// LangMiddleware 注入 lang 到 context
+// LangMiddleware injects lang into context
 func LangMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		lang := c.GetHeader("Accept-Language")
 		if lang == "" {
 			lang = "en" // default English
 		} else {
-			// 只取第一个语言
+			// Only take the first language
 			lang = strings.Split(lang, ",")[0]
 		}
-		// 设置到 gin.Context 中，这样 c.GetString("lang") 就能获取到
+		// Set to gin.Context so c.GetString("lang") can retrieve it
 		c.Set("lang", lang)
 		c.Next()
 	}

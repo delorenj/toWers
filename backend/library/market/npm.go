@@ -23,13 +23,13 @@ import (
 )
 
 const (
-	// NPMAPI 官方npm registry API
+	// NPMAPI official npm registry API
 	NPMAPI = "https://registry.npmjs.org/-/v1/search"
-	// NPMPackageInfo 官方npm包信息API
+	// NPMPackageInfo official npm package info API
 	NPMPackageInfo = "https://registry.npmjs.org/"
 )
 
-// NPMSearchResult 表示npm搜索结果
+// NPMSearchResult represents npm search results
 type NPMSearchResult struct {
 	Objects []struct {
 		Package struct {
@@ -74,7 +74,7 @@ type NPMSearchResult struct {
 	TotalPages  int    `json:"total_pages,omitempty"`
 }
 
-// NPMPackageDetails 表示npm包详细信息
+// NPMPackageDetails represents npm package details
 type NPMPackageDetails struct {
 	Name        string `json:"name"`
 	Version     string `json:"version"`
@@ -87,20 +87,20 @@ type NPMPackageDetails struct {
 	Bin             map[string]string `json:"bin"`
 	Keywords        []string          `json:"keywords"`
 	License         string            `json:"license"`
-	RequiresEnv     []string          `json:"requiresEnv,omitempty"` // 可能的自定义字段，指示所需环境变量
+	RequiresEnv     []string          `json:"requiresEnv,omitempty"` // Possible custom field indicating required environment variables
 	Dependencies    map[string]string `json:"dependencies"`
 	DevDependencies map[string]string `json:"devDependencies"`
 	LatestVersion   string            `json:"latestVersion,omitempty"`
 	VersionCount    int               `json:"versionCount,omitempty"`
 	LastUpdated     string            `json:"lastUpdated,omitempty"`
 	ReadmeHTML      string            `json:"readmeHTML,omitempty"`
-	Readme          string            `json:"readme,omitempty"`         // 包README内容
-	ReadmeFilename  string            `json:"readmeFilename,omitempty"` // README文件名
+	Readme          string            `json:"readme,omitempty"`         // Package README content
+	ReadmeFilename  string            `json:"readmeFilename,omitempty"` // README filename
 }
 
-// SearchPackageResult 包含搜索结果中每个包的简化信息
-// 这个结构体用于在前端展示搜索结果，并且现在会包含已安装服务的数字ID
-// TODO: 和 ServiceType 统一字段，目前字段有点乱
+// SearchPackageResult contains simplified information for each package in search results
+// This struct is used to display search results in the frontend, and now includes installed service numeric ID
+// TODO: Unify fields with ServiceType, currently fields are a bit messy
 type SearchPackageResult struct {
 	Name               string   `json:"name"`
 	Version            string   `json:"version"`
@@ -121,7 +121,7 @@ type SearchPackageResult struct {
 	InstalledServiceID *int64   `json:"installed_service_id,omitempty"` // Numeric ID if installed
 }
 
-// SearchNPMPackages 搜索npm包
+// SearchNPMPackages searches npm packages
 func SearchNPMPackages(ctx context.Context, query string, limit int, page int) (*NPMSearchResult, error) {
 	if limit <= 0 {
 		limit = 20

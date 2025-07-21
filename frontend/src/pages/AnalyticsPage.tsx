@@ -28,7 +28,7 @@ export function AnalyticsPage() {
     const [utilizationStats, setUtilizationStats] = useState<ServiceUtilizationStat[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // 默认倒序
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // Default descending order
 
     useEffect(() => {
         const fetchUtilizationStats = async () => {
@@ -61,16 +61,16 @@ export function AnalyticsPage() {
         fetchUtilizationStats();
     }, []);
 
-    // 排序和过滤函数
+    // Sort and filter function
     const sortedAndFilteredStats = utilizationStats
-        .filter(stat => stat.enabled) // 只显示启用的服务
+        .filter(stat => stat.enabled) // Only show enabled services
         .sort((a, b) => {
             const aRequests = a.today_request_count || 0;
             const bRequests = b.today_request_count || 0;
             return sortOrder === 'desc' ? bRequests - aRequests : aRequests - bRequests;
         });
 
-    // 切换排序方向
+    // Toggle sort direction
     const toggleSortOrder = () => {
         setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
     };

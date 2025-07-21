@@ -66,8 +66,8 @@ export function PreferencesPage() {
         const res = await api.put('/option/', { key: 'ServerAddress', value: clean }) as APIResponse;
         if (res.success) {
             setMessage(t('preferences.messages.saveSuccess'));
-            setServerAddress(clean); // 立即同步到全局
-            sessionStorage.setItem('server_address', clean); // 同步更新缓存
+            setServerAddress(clean); // Sync to global state immediately
+            sessionStorage.setItem('server_address', clean); // Update cache synchronously
         } else {
             setMessage(res.message || t('preferences.messages.saveFailed'));
         }
@@ -189,7 +189,7 @@ export function PreferencesPage() {
                 <p className="text-muted-foreground">{t('preferences.description')}</p>
             </div>
 
-            {/* 通用设置 */}
+            {/* General Settings */}
             <div className="space-y-6">
                 <div className="space-y-2">
                     <h3 className="text-xl font-semibold">{t('preferences.general')}</h3>
@@ -218,14 +218,14 @@ export function PreferencesPage() {
                 </div>
             </div>
 
-            {/* 配置登录注册 */}
+            {/* Configure Login/Registration */}
             <div className="space-y-6">
                 <div className="space-y-2">
                     <h3 className="text-xl font-semibold">{t('preferences.oauth')}</h3>
                     <p className="text-sm text-muted-foreground">{t('preferences.oauthDesc')}</p>
                 </div>
                 <div className="bg-card border border-border rounded-lg p-6 space-y-4">
-                    {/* GitHub OAuth 开关 */}
+                    {/* GitHub OAuth Toggle */}
                     <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/30">
                         <div className="flex items-center space-x-3">
                             <input
@@ -250,7 +250,7 @@ export function PreferencesPage() {
                         )}
                     </div>
 
-                    {/* Google OAuth 开关 */}
+                    {/* Google OAuth Toggle */}
                     <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/30">
                         <div className="flex items-center space-x-3">
                             <input
@@ -277,7 +277,7 @@ export function PreferencesPage() {
                 </div>
             </div>
 
-            {/* GitHub OAuth 配置 */}
+            {/* GitHub OAuth Configuration */}
             <div className="space-y-6">
                 <div className="space-y-2">
                     <h3 className="text-xl font-semibold">{t('preferences.github')}</h3>
@@ -339,7 +339,7 @@ export function PreferencesPage() {
                 </div>
             </div>
 
-            {/* Google OAuth 配置 */}
+            {/* Google OAuth Configuration */}
             <div className="space-y-6">
                 <div className="space-y-2">
                     <h3 className="text-xl font-semibold">{t('preferences.google')}</h3>

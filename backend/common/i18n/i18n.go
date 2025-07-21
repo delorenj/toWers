@@ -19,14 +19,14 @@ var (
 	messagesLock sync.RWMutex
 )
 
-// 初始化i18n，加载所有语言资源
+// Init initializes i18n, loads all language resources
 func Init(localesDir string) error {
-	// 确保目录存在
+	// Ensure directory exists
 	if _, err := os.Stat(localesDir); os.IsNotExist(err) {
 		return fmt.Errorf("locales directory not found: %s", localesDir)
 	}
 
-	// 读取所有语言文件
+	// Read all language files
 	files, err := os.ReadDir(localesDir)
 	if err != nil {
 		return err
@@ -37,22 +37,22 @@ func Init(localesDir string) error {
 			continue
 		}
 
-		// 提取语言代码 (文件名去掉扩展名)
+		// Extract language code (filename without extension)
 		lang := file.Name()[:len(file.Name())-5]
 
-		// 读取语言文件
+		// Read language file
 		data, err := os.ReadFile(filepath.Join(localesDir, file.Name()))
 		if err != nil {
 			return err
 		}
 
-		// 解析JSON
+		// Parse JSON
 		var langMessages map[string]string
 		if err := json.Unmarshal(data, &langMessages); err != nil {
 			return err
 		}
 
-		// 添加到消息映射
+		// Add to message mapping
 		messagesLock.Lock()
 		messages[lang] = langMessages
 		messagesLock.Unlock()
@@ -61,43 +61,43 @@ func Init(localesDir string) error {
 	return nil
 }
 
-// 获取消息模板
+// getMessageTemplate gets message template
 func getMessageTemplate(code string, lang string) string {
 	messagesLock.RLock()
 	defer messagesLock.RUnlock()
 
-	// 检查语言是否存在
+	// Check if language exists
 	langMessages, ok := messages[lang]
 	if !ok {
-		// 回退到默认语言
+		// Fall back to default language
 		langMessages = messages[DefaultLang]
-		// 如果默认语言也不存在，直接返回错误码
+		// If default language doesn't exist either, return error code directly
 		if langMessages == nil {
 			return code
 		}
 	}
 
-	// 检查消息是否存在
+	// Check if message exists
 	message, ok := langMessages[code]
 	if !ok {
-		// 如果没有找到消息，尝试使用默认语言
+		// If message not found, try using default language
 		if lang != DefaultLang && messages[DefaultLang] != nil {
 			if defaultMsg, ok := messages[DefaultLang][code]; ok {
 				return defaultMsg
 			}
 		}
-		// 最后回退到错误码本身
+		// Finally fall back to error code itself
 		return code
 	}
 
 	return message
 }
 
-// 翻译错误码为消息
+// Translate translates error code to message
 func Translate(code string, lang string, args ...interface{}) string {
 	template := getMessageTemplate(code, lang)
 
-	// 如果有参数，格式化消息
+	// If there are parameters, format the message
 	if len(args) > 0 {
 		return fmt.Sprintf(template, args...)
 	}

@@ -40,7 +40,7 @@ type User struct {
 
 var UserDB *thing.Thing[*User]
 
-// UserInit 用于在 InitDB 时初始化 UserDB
+// UserInit initializes UserDB during InitDB
 func UserInit() error {
 	var err error
 	UserDB, err = thing.Use[*User]()
@@ -63,15 +63,15 @@ func GetAllUsers(startIdx int, num int) ([]*User, error) {
 }
 
 func SearchUsers(keyword string) ([]*User, error) {
-	// 尝试将 keyword 转换为数字
+	// Try to convert keyword to number
 	if id, err := strconv.ParseUint(keyword, 10, 64); err == nil {
-		// keyword 是数字，包含 ID 搜索
+		// keyword is a number, include ID search
 		return UserDB.Where(
 			"id = ? OR username LIKE ? OR email LIKE ? OR display_name LIKE ?",
 			id, keyword+"%", keyword+"%", keyword+"%",
 		).Order("id DESC").Fetch(0, 100)
 	} else {
-		// keyword 不是数字，只搜索字符串字段
+		// keyword is not a number, only search string fields
 		return UserDB.Where(
 			"username LIKE ? OR email LIKE ? OR display_name LIKE ?",
 			keyword+"%", keyword+"%", keyword+"%",
@@ -79,7 +79,7 @@ func SearchUsers(keyword string) ([]*User, error) {
 	}
 }
 
-// GetUserById 根据ID获取用户
+// GetUserById gets user by ID
 func GetUserById(id int64, selectAll bool) (*User, error) {
 	if id == 0 {
 		return nil, errors.New("empty_id")
@@ -94,7 +94,7 @@ func GetUserById(id int64, selectAll bool) (*User, error) {
 	return user, nil
 }
 
-// DeleteUserById 根据ID软删除用户
+// DeleteUserById soft deletes user by ID
 func DeleteUserById(id int64) error {
 	if id == 0 {
 		return errors.New("empty_id")
@@ -325,7 +325,7 @@ func ResetUserPasswordByEmail(email string, password string) error {
 	return UserDB.Save(user)
 }
 
-// GetUserByUsernameForAdmin 根据用户名获取用户（用于管理员操作，不受状态限制）
+// GetUserByUsernameForAdmin gets user by username (for admin operations, not restricted by status)
 func GetUserByUsernameForAdmin(username string) (*User, error) {
 	if username == "" {
 		return nil, errors.New("empty_username")

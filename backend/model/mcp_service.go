@@ -66,13 +66,13 @@ type MCPService struct {
 	PackageManager        string          `db:"package_manager"`         // For marketplace services: npm, pypi
 	SourcePackageName     string          `db:"source_package_name"`     // For marketplace services: package name in the repository
 	InstalledVersion      string          `db:"installed_version"`       // For marketplace services: currently installed version
-	InstallerUserID       int64           `db:"installer_user_id"`       // 记录安装者的用户ID
-	HealthStatus          string          `db:"-"`                       // 健康状态: unknown, healthy, unhealthy, starting, stopped
-	LastHealthCheck       time.Time       `db:"-"`                       // 最后健康检查时间
-	HealthDetails         string          `db:"-"`                       // 健康详情的JSON字符串
+	InstallerUserID       int64           `db:"installer_user_id"`       // Record installer's user ID
+	HealthStatus          string          `db:"-"`                       // Health status: unknown, healthy, unhealthy, starting, stopped
+	LastHealthCheck       time.Time       `db:"-"`                       // Last health check time
+	HealthDetails         string          `db:"-"`                       // Health details JSON string
 	DefaultEnvsJSON       string          `db:"default_envs_json,default:'{}'"`
 	HeadersJSON           string          `json:"headers_json,omitempty" db:"headers_json,default:'{}'"` // JSON string for custom request headers map[string]string
-	RPDLimit              int             `json:"rpd_limit,omitempty" db:"rpd_limit,default:0"`          // 每日请求次数限制(0表示不限制)
+	RPDLimit              int             `json:"rpd_limit,omitempty" db:"rpd_limit,default:0"`          // Daily request limit (0 means no limit)
 }
 
 // TableName sets the table name for the MCPService model

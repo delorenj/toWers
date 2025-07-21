@@ -19,13 +19,13 @@ export function OAuthCallback() {
             const provider = window.location.pathname.includes('/oauth/github') ? 'github' : 'google';
 
             if (error) {
-                setError(`OAuth ${provider} 授权失败: ${error}`);
+                setError(`OAuth ${provider} authorization failed: ${error}`);
                 setLoading(false);
                 return;
             }
 
             if (!code) {
-                setError('缺少授权码');
+                setError('Missing authorization code');
                 setLoading(false);
                 return;
             }
@@ -35,7 +35,7 @@ export function OAuthCallback() {
                 const response = await api.get(`${endpoint}?code=${code}`) as APIResponse;
 
                 if (response.success && response.data?.access_token && response.data.user) {
-                    // 登录成功
+                    // Login successful
                     authLogin(response.data.user, response.data.access_token);
 
                     if (response.data.refresh_token) {
@@ -43,18 +43,18 @@ export function OAuthCallback() {
                     }
 
                     toast({
-                        title: "登录成功",
-                        description: `欢迎通过 ${provider === 'github' ? 'GitHub' : 'Google'} 登录！`
+                        title: "Login successful",
+                        description: `Welcome! You've logged in via ${provider === 'github' ? 'GitHub' : 'Google'}.`
                     });
 
-                    // 重定向到主页
+                    // Redirect to home page
                     navigate('/', { replace: true });
                 } else {
-                    setError(response.message || `${provider} OAuth 登录失败`);
+                    setError(response.message || `${provider} OAuth login failed`);
                 }
             } catch (error: any) {
                 console.error('OAuth callback error:', error);
-                setError(error?.response?.data?.message || error.message || `${provider} OAuth 登录失败`);
+                setError(error?.response?.data?.message || error.message || `${provider} OAuth login failed`);
             } finally {
                 setLoading(false);
             }
@@ -68,7 +68,7 @@ export function OAuthCallback() {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-lg">正在处理 OAuth 登录...</p>
+                    <p className="text-lg">Processing OAuth login...</p>
                 </div>
             </div>
         );
@@ -79,13 +79,13 @@ export function OAuthCallback() {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center max-w-md">
                     <div className="text-red-500 text-6xl mb-4">⚠️</div>
-                    <h1 className="text-2xl font-bold mb-4">OAuth 登录失败</h1>
+                    <h1 className="text-2xl font-bold mb-4">OAuth Login Failed</h1>
                     <p className="text-gray-600 mb-6">{error}</p>
                     <button
                         onClick={() => navigate('/login')}
                         className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                     >
-                        返回登录页面
+                        Return to Login Page
                     </button>
                 </div>
             </div>

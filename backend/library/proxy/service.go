@@ -52,51 +52,51 @@ func (s *SharedMcpInstance) Shutdown(ctx context.Context) error {
 	return firstErr
 }
 
-// ServiceStatus 表示服务的健康状态
+// ServiceStatus represents service health status
 type ServiceStatus string
 
 const (
-	// StatusUnknown 表示服务状态未知
+	// StatusUnknown indicates service status is unknown
 	StatusUnknown ServiceStatus = "unknown"
-	// StatusHealthy 表示服务正常
+	// StatusHealthy indicates service is healthy
 	StatusHealthy ServiceStatus = "healthy"
-	// StatusUnhealthy 表示服务异常
+	// StatusUnhealthy indicates service is unhealthy
 	StatusUnhealthy ServiceStatus = "unhealthy"
-	// StatusStarting 表示服务正在启动
+	// StatusStarting indicates service is starting
 	StatusStarting ServiceStatus = "starting"
-	// StatusStopped 表示服务已停止
+	// StatusStopped indicates service is stopped
 	StatusStopped ServiceStatus = "stopped"
 )
 
-// ServiceHealth 包含服务健康相关的信息
+// ServiceHealth contains service health related information
 type ServiceHealth struct {
 	Status        ServiceStatus `json:"status"`
 	LastChecked   time.Time     `json:"last_checked"`
-	ResponseTime  int64         `json:"response_time_ms,omitempty"` // 毫秒
+	ResponseTime  int64         `json:"response_time_ms,omitempty"` // milliseconds
 	ErrorMessage  string        `json:"error_message,omitempty"`
 	StartTime     time.Time     `json:"start_time,omitempty"`
 	SuccessCount  int64         `json:"success_count"`
 	FailureCount  int64         `json:"failure_count"`
-	UpTime        int64         `json:"up_time_seconds,omitempty"` // 秒
-	WarningLevel  int           `json:"warning_level,omitempty"`   // 0-无警告，1-轻微，2-中等，3-严重
-	InstanceCount int           `json:"instance_count,omitempty"`  // 实例数量（如有多实例）
+	UpTime        int64         `json:"up_time_seconds,omitempty"` // seconds
+	WarningLevel  int           `json:"warning_level,omitempty"`   // 0-no warning, 1-minor, 2-moderate, 3-severe
+	InstanceCount int           `json:"instance_count,omitempty"`  // instance count (if multi-instance)
 }
 
-// Service 接口定义了所有MCP服务必须实现的方法
+// Service interface defines methods all MCP services must implement
 type Service interface {
-	// ID 返回服务的唯一标识符
+	// ID returns the unique identifier of the service
 	ID() int64
 
-	// Name 返回服务的名称
+	// Name returns the name of the service
 	Name() string
 
-	// Type 返回服务的类型（stdio、sse、streamable_http）
+	// Type returns the type of service (stdio, sse, streamable_http)
 	Type() model.ServiceType
 
-	// Start 启动服务
+	// Start starts the service
 	Start(ctx context.Context) error
 
-	// Stop 停止服务
+	// Stop stops the service
 	Stop(ctx context.Context) error
 
 	// IsRunning 检查服务是否正在运行

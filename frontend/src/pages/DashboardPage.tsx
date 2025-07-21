@@ -49,17 +49,6 @@ export function DashboardPage() {
         } else {
             return `${minutes}m`;
         }
-                return `${minutes}分钟`;
-            }
-        } else {
-            if (days > 0) {
-                return `${days}d ${hours}h ${minutes}m`;
-            } else if (hours > 0) {
-                return `${hours}h ${minutes}m`;
-            } else {
-                return `${minutes}m`;
-            }
-        }
     };
 
 
@@ -137,7 +126,7 @@ export function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-8">
             <h2 className="text-3xl font-bold tracking-tight mb-2">{t('dashboard.title')}</h2>
 
-            {/* 欢迎卡片 */}
+            {/* Welcome card */}
             <Card className="border-border bg-gradient-to-br from-primary/5 to-primary/10">
                 <CardHeader className="text-center">
                     <CardTitle className="text-2xl">{t('dashboard.welcome')}</CardTitle>
@@ -150,7 +139,7 @@ export function DashboardPage() {
                 </CardContent>
             </Card>
 
-            {/* 统计卡片 */}
+            {/* Statistics cards */}
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 <Card className="border bg-card/30">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -202,7 +191,7 @@ export function DashboardPage() {
                 </Card>
             </div>
 
-            {/* 系统状态和快速访问 */}
+            {/* System status and quick access */}
             <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
                 <Card className="col-span-1 bg-card/30 border">
                     <CardHeader>
@@ -211,7 +200,7 @@ export function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {/* 系统运行时间 */}
+                            {/* System uptime */}
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                     <Timer className="h-5 w-5 text-blue-500" />
@@ -224,7 +213,7 @@ export function DashboardPage() {
                                 </div>
                             </div>
 
-                            {/* 服务健康概览 */}
+                            {/* Service health overview */}
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-2">
                                     <Server className="h-5 w-5 text-green-500" />
@@ -326,7 +315,7 @@ export function DashboardPage() {
                 </Card>
             </div>
 
-            {/* 最近活动日志 */}
+            {/* Recent activity log */}
             <Card className="border bg-card/30">
                 <CardHeader>
                     <CardTitle>{t('dashboard.recentActivity')}</CardTitle>

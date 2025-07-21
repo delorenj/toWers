@@ -165,7 +165,7 @@ func (m *ServiceManager) UnregisterService(ctx context.Context, serviceID int64)
 	return nil
 }
 
-// GetService 获取一个服务实例
+// GetService gets a service instance
 func (m *ServiceManager) GetService(serviceID int64) (Service, error) {
 	m.mutex.RLock()
 	defer m.mutex.RUnlock()
@@ -178,7 +178,7 @@ func (m *ServiceManager) GetService(serviceID int64) (Service, error) {
 	return service, nil
 }
 
-// StartService 启动一个服务
+// StartService starts a service
 func (m *ServiceManager) StartService(ctx context.Context, serviceID int64) error {
 	service, err := m.GetService(serviceID)
 	if err != nil {
@@ -186,7 +186,7 @@ func (m *ServiceManager) StartService(ctx context.Context, serviceID int64) erro
 	}
 
 	if service.IsRunning() {
-		// 服务已经在运行，不需要再次启动
+		// Service is already running, no need to start again
 		return nil
 	}
 
@@ -197,7 +197,7 @@ func (m *ServiceManager) StartService(ctx context.Context, serviceID int64) erro
 	return nil
 }
 
-// StopService 停止一个服务
+// StopService stops a service
 func (m *ServiceManager) StopService(ctx context.Context, serviceID int64) error {
 	service, err := m.GetService(serviceID)
 	if err != nil {
@@ -205,7 +205,7 @@ func (m *ServiceManager) StopService(ctx context.Context, serviceID int64) error
 	}
 
 	if !service.IsRunning() {
-		// 服务已经停止，不需要再次停止
+		// Service is already stopped, no need to stop again
 		return nil
 	}
 
@@ -216,21 +216,21 @@ func (m *ServiceManager) StopService(ctx context.Context, serviceID int64) error
 	return nil
 }
 
-// RestartService 重启一个服务
+// RestartService restarts a service
 func (m *ServiceManager) RestartService(ctx context.Context, serviceID int64) error {
 	service, err := m.GetService(serviceID)
 	if err != nil {
 		return err
 	}
 
-	// 如果服务正在运行，先停止它
+	// If service is running, stop it first
 	if service.IsRunning() {
 		if err := service.Stop(ctx); err != nil {
 			return fmt.Errorf("failed to stop service during restart: %w", err)
 		}
 	}
 
-	// 启动服务
+	// Start service
 	if err := service.Start(ctx); err != nil {
 		return fmt.Errorf("failed to start service during restart: %w", err)
 	}
@@ -238,17 +238,17 @@ func (m *ServiceManager) RestartService(ctx context.Context, serviceID int64) er
 	return nil
 }
 
-// GetServiceHealth 获取服务的健康状态
+// GetServiceHealth gets service health status
 func (m *ServiceManager) GetServiceHealth(serviceID int64) (*ServiceHealth, error) {
 	return m.healthChecker.GetServiceHealth(serviceID)
 }
 
-// ForceCheckServiceHealth 强制检查服务的健康状态
+// ForceCheckServiceHealth forces a health check for a service
 func (m *ServiceManager) ForceCheckServiceHealth(serviceID int64) (*ServiceHealth, error) {
 	return m.healthChecker.ForceCheckService(serviceID)
 }
 
-// UpdateServiceConfig 更新服务配置
+// UpdateServiceConfig updates service configuration
 func (m *ServiceManager) UpdateServiceConfig(serviceID int64, config map[string]interface{}) error {
 	service, err := m.GetService(serviceID)
 	if err != nil {
@@ -258,7 +258,7 @@ func (m *ServiceManager) UpdateServiceConfig(serviceID int64, config map[string]
 	return service.UpdateConfig(config)
 }
 
-// GetAllServices 获取所有服务
+// GetAllServices gets all services
 func (m *ServiceManager) GetAllServices() []Service {
 	m.mutex.RLock()
 	defer m.mutex.RUnlock()
@@ -271,7 +271,7 @@ func (m *ServiceManager) GetAllServices() []Service {
 	return services
 }
 
-// GetServiceHealthJSON 获取服务健康状态的JSON字符串
+// GetServiceHealthJSON gets service health status as JSON string
 func (m *ServiceManager) GetServiceHealthJSON(serviceID int64) (string, error) {
 	health, err := m.GetServiceHealth(serviceID)
 	if err != nil {
@@ -286,17 +286,17 @@ func (m *ServiceManager) GetServiceHealthJSON(serviceID int64) (string, error) {
 	return string(healthJSON), nil
 }
 
-// UpdateMCPServiceHealth 更新缓存中服务的健康状态
+// UpdateMCPServiceHealth updates service health status in cache
 func (m *ServiceManager) UpdateMCPServiceHealth(serviceID int64) error {
 	health, err := m.GetServiceHealth(serviceID)
 	if err != nil {
 		return err
 	}
 
-	// 获取全局健康状态缓存管理器
+	// Get global health status cache manager
 	cacheManager := GetHealthCacheManager()
 
-	// 将健康状态存储到缓存中
+	// Store health status in cache
 	cacheManager.SetServiceHealth(serviceID, health)
 
 	return nil
@@ -317,17 +317,17 @@ func (m *ServiceManager) StartDaemon() {
 			m.mutex.RUnlock()
 
 			for _, service := range services {
-				// 检查服务状态
+				// Check service status
 				health, err := m.ForceCheckServiceHealth(service.ID())
 				if err != nil {
 					continue
 				}
 
-				// 如果服务已停止，尝试重启
+				// If service is stopped, try to restart
 				if health.Status == StatusStopped {
 					ctx := context.Background()
 					if err := m.RestartService(ctx, service.ID()); err != nil {
-						// 记录错误但继续处理其他服务
+						// Log error but continue processing other services
 						log.Printf("Failed to auto-restart service %d: %v", service.ID(), err)
 						continue
 					}
@@ -338,7 +338,7 @@ func (m *ServiceManager) StartDaemon() {
 	}()
 }
 
-// GetSSEServiceByName 根据服务名查找 SSESvc 实例
+// GetSSEServiceByName finds SSESvc instance by service name
 func (m *ServiceManager) GetSSEServiceByName(serviceName string) (*SSESvc, error) {
 	m.mutex.RLock()
 	defer m.mutex.RUnlock()
@@ -352,7 +352,7 @@ func (m *ServiceManager) GetSSEServiceByName(serviceName string) (*SSESvc, error
 	return nil, ErrServiceNotFound
 }
 
-// SetService 允许注入 mock Service（测试专用）
+// SetService allows injecting mock Service (for testing only)
 func (m *ServiceManager) SetService(serviceID int64, svc Service) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()

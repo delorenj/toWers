@@ -35,7 +35,7 @@ func UpdateOptionMap(key string, value string) {
 
 var OptionDB *thing.Thing[*Option]
 
-// OptionInit 用于在 InitDB 时初始化 OptionDB
+// OptionInit initializes OptionDB during InitDB
 func OptionInit() error {
 	var err error
 	OptionDB, err = thing.Use[*Option]()

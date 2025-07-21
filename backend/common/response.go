@@ -7,19 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// API响应的标准格式
+// APIResponse standard format for API responses
 type APIResponse struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
-// 时间格式常量
+// Time format constants
 const (
 	RFC3339MilliZ = "2006-01-02T15:04:05.000Z07:00"
 )
 
-// RespSuccess 响应成功，返回数据
+// RespSuccess responds with success and returns data
 func RespSuccess(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, APIResponse{
 		Success: true,
@@ -28,7 +28,7 @@ func RespSuccess(c *gin.Context, data interface{}) {
 	})
 }
 
-// RespSuccessStr 响应成功，返回消息
+// RespSuccessStr responds with success and returns message
 func RespSuccessStr(c *gin.Context, msg string) {
 	c.JSON(http.StatusOK, APIResponse{
 		Success: true,
@@ -36,7 +36,7 @@ func RespSuccessStr(c *gin.Context, msg string) {
 	})
 }
 
-// RespError 响应错误，包含错误信息
+// RespError responds with error including error information
 func RespError(c *gin.Context, statusCode int, msg string, err error) {
 	errMsg := msg
 	if err != nil {
@@ -49,7 +49,7 @@ func RespError(c *gin.Context, statusCode int, msg string, err error) {
 	})
 }
 
-// RespErrorStr 响应错误，只包含错误消息
+// RespErrorStr responds with error containing only error message
 func RespErrorStr(c *gin.Context, statusCode int, msg string) {
 	c.JSON(statusCode, APIResponse{
 		Success: false,
@@ -57,7 +57,7 @@ func RespErrorStr(c *gin.Context, statusCode int, msg string) {
 	})
 }
 
-// FormatTime 格式化时间为RFC3339MilliZ格式
+// FormatTime formats time to RFC3339MilliZ format
 func FormatTime(t time.Time) string {
 	return t.Format(RFC3339MilliZ)
 }

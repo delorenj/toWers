@@ -103,14 +103,14 @@ const BatchImportModal: React.FC<BatchImportModalProps> = ({
                 console.error('SSE connection error:', error);
                 eventSource.close();
                 setIsImporting(false);
-                alert('连接错误，请重试');
+                alert('Connection error, please try again');
                 setView('input');
             };
 
         } catch (error) {
             console.error('Error starting batch import:', error);
             setIsImporting(false);
-            alert('启动导入失败：' + (error instanceof Error ? error.message : String(error)));
+            alert('Failed to start import: ' + (error instanceof Error ? error.message : String(error)));
             setView('input');
         }
     };

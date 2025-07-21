@@ -8,7 +8,7 @@ interface User {
     display_name?: string;
     email?: string;
     role?: number;
-    token?: string; // 添加token字段
+    token?: string; // Add token field
     // Add other fields if needed by the UI, e.g., avatar_url
 }
 
@@ -18,7 +18,7 @@ interface AuthContextType {
     login: (userData: User, authToken: string) => void;
     logout: () => void;
     isLoading: boolean; // To handle initial loading of auth state
-    updateUserInfo: (userData: User) => void; // 添加更新用户信息的方法
+    updateUserInfo: (userData: User) => void; // Add method to update user info
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
