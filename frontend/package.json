@@ -1,7 +1,7 @@
 {
-  "name": "frontend",
-  "private": true,
-  "version": "0.0.0",
+  "name": "toWers-mcp-proxy-frontend",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,6 +14,17 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest --watch"
   },
+  "description": "This is the frontend to the toWers MCP Proxy app",
+  "main": "eslint.config.js",
+  "keywords": [
+    "mcp",
+    "mcp-proxy",
+    "frontend",
+    "react",
+    "vite"
+  ],
+  "author": "Jarad DeLorenzo",
+  "license": "MIT",
   "dependencies": {
     "@headlessui/react": "^2.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -73,10 +84,5 @@
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",
     "vitest": "^3.1.4"
-  },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
-  "main": "eslint.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

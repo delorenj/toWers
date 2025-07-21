@@ -1,6 +1,6 @@
 services:
   toWers:
-    image: docker.io/buru2020/toWers:latest
+    image: delorenj/toWers:latest
     container_name: toWers
     restart: unless-stopped
     ports:

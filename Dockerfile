@@ -3,8 +3,8 @@ FROM node:22-slim AS builder
 WORKDIR /build
 COPY ./frontend .
 COPY ./VERSION .
-RUN npm install
-RUN REACT_APP_VERSION=$(cat VERSION) npm run build
+RUN pnpm install
+RUN REACT_APP_VERSION=$(cat VERSION) pnpm run build
 
 FROM --platform=$BUILDPLATFORM golang AS builder2
 
@@ -57,7 +57,7 @@ FROM ghcr.io/astral-sh/uv:alpine
 
 RUN apk update \
   && apk upgrade \
-  && apk add --no-cache ca-certificates tzdata nodejs npm python3 git \
+  && apk add --no-cache ca-certificates tzdata nodejs npm pnpm python3 git \
   && update-ca-certificates 2>/dev/null || true
 
 RUN mkdir -p /data
