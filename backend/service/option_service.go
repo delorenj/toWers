@@ -1,7 +1,7 @@
 package service
 
 import (
-	"one-mcp/backend/model"
+	"toWers/backend/model"
 )
 
 // AllOption returns all options

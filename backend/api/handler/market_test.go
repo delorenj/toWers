@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"one-mcp/backend/model"
+	"toWers/backend/model"
 	"testing"
 
 	"github.com/gin-gonic/gin"

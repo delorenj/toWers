@@ -8,12 +8,12 @@ import (
 	"strconv"
 	"time"
 
-	"one-mcp/backend/common"
-	"one-mcp/backend/common/i18n" // Added back for Translate function
-	"one-mcp/backend/library/proxy"
-	"one-mcp/backend/model" // Now using model for ProxyRequestStat
+	"toWers/backend/common"
+	"toWers/backend/common/i18n" // Added back for Translate function
+	"toWers/backend/library/proxy"
+	"toWers/backend/model" // Now using model for ProxyRequestStat
 
-	// "one-mcp/backend/i18n" // Commented out as it's only used in placeholder error handling
+	// "toWers/backend/i18n" // Commented out as it's only used in placeholder error handling
 
 	"github.com/burugo/thing"
 	"github.com/gin-gonic/gin"

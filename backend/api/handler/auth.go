@@ -6,10 +6,10 @@ import (
 
 	// "time" // No longer needed here as Logout logic is separate
 
-	// "one-mcp/backend/common" // No longer needed here if Redis logic is self-contained in Logout
-	"one-mcp/backend/common"
-	"one-mcp/backend/model"
-	"one-mcp/backend/service"
+	// "toWers/backend/common" // No longer needed here if Redis logic is self-contained in Logout
+	"toWers/backend/common"
+	"toWers/backend/model"
+	"toWers/backend/service"
 
 	"github.com/gin-gonic/gin"
 )

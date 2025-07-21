@@ -1,29 +1,28 @@
 services:
-  one-mcp:
-    image: docker.io/buru2020/one-mcp:latest
-    container_name: one-mcp
+  toWers:
+    image: docker.io/buru2020/toWers:latest
+    container_name: toWers
     restart: unless-stopped
     ports:
-      - "${PORT}:3000"
+      - '${PORT}:3000'
     volumes:
-      - one-mcp-data:/data
+      - toWers-data:/data
     environment:
       - JWT_SECRET=${JWT_SECRET}
-      - SQLITE_PATH=/data/one-mcp.db
+      - SQLITE_PATH=/data/toWers.db
       - GITHUB_TOKEN=${GITHUB_TOKEN}
     networks:
       - proxy
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.mcp.rule=Host(`mcp.delo.sh`)"
-      - "traefik.http.routers.mcp.entrypoints=websecure"
-      - "traefik.http.routers.mcp.tls.certresolver=letsencrypt"
-      - "traefik.http.services.mcp.loadbalancer.server.port=3000"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.mcp.rule=Host(`mcp.delo.sh`)'
+      - 'traefik.http.routers.mcp.entrypoints=websecure'
+      - 'traefik.http.routers.mcp.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.mcp.loadbalancer.server.port=3000'
 
 networks:
   proxy:
     external: true
 
 volumes:
-  one-mcp-data:
-
+  toWers-data:

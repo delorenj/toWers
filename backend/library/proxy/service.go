@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"one-mcp/backend/common"
-	"one-mcp/backend/model"
+	"toWers/backend/common"
+	"toWers/backend/model"
 
 	mcpclient "github.com/mark3labs/mcp-go/client"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -727,7 +727,7 @@ func createActualMcpGoServerAndClientUncached(
 	)
 
 	clientInfo := mcp.Implementation{
-		Name:    fmt.Sprintf("one-mcp-proxy-for-%s-%s", serviceConfigForInstance.Name, instanceNameDetail),
+		Name:    fmt.Sprintf("toWers-proxy-for-%s-%s", serviceConfigForInstance.Name, instanceNameDetail),
 		Version: common.Version,
 	}
 

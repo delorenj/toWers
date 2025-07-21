@@ -83,11 +83,11 @@ FRONTEND_PID=$!
 cd ..
 # Build backend service
 echo "Building backend service..."
-go build -o one-mcp .
+go build -o toWers .
 
 # Start backend service
 echo "Starting backend service..."
-nohup ./one-mcp >backend.log 2>&1 &
+nohup ./toWers >backend.log 2>&1 &
 BACKEND_PID=$!
 echo "Backend started on :$PORT (PID: $BACKEND_PID), logs in backend.log"
 

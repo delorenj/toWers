@@ -11,12 +11,12 @@ import (
 	"strings"
 	"syscall"
 
-	"one-mcp/backend/api/middleware"
-	"one-mcp/backend/api/route"
-	"one-mcp/backend/common"
-	"one-mcp/backend/common/i18n"
-	"one-mcp/backend/library/proxy"
-	"one-mcp/backend/model"
+	"toWers/backend/api/middleware"
+	"toWers/backend/api/route"
+	"toWers/backend/common"
+	"toWers/backend/common/i18n"
+	"toWers/backend/library/proxy"
+	"toWers/backend/model"
 
 	"github.com/gin-gonic/gin"
 )

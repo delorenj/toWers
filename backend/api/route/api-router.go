@@ -1,8 +1,8 @@
 package route
 
 import (
-	"one-mcp/backend/api/handler"
-	"one-mcp/backend/api/middleware"
+	"toWers/backend/api/handler"
+	"toWers/backend/api/middleware"
 
 	"github.com/gin-gonic/gin"
 )

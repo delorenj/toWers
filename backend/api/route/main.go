@@ -2,8 +2,8 @@ package route
 
 import (
 	"embed"
-	"one-mcp/backend/api/middleware"
-	"one-mcp/backend/common"
+	"toWers/backend/api/middleware"
+	"toWers/backend/common"
 
 	"github.com/gin-gonic/gin"
 )

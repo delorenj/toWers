@@ -121,7 +121,7 @@ func InstallPyPIPackage(ctx context.Context, packageName, version, command strin
 	initRequest := mcp.InitializeRequest{}
 	initRequest.Params.ProtocolVersion = mcp.LATEST_PROTOCOL_VERSION
 	initRequest.Params.ClientInfo = mcp.Implementation{
-		Name:    "one-mcp", // Should this be configurable or a constant?
+		Name:    "toWers", // Should this be configurable or a constant?
 		Version: "1.0.0",   // App version
 	}
 	initRequest.Params.Capabilities = mcp.ClientCapabilities{} // Define as needed

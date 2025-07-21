@@ -1,7 +1,7 @@
 package model
 
 import (
-	"one-mcp/backend/common"
+	"toWers/backend/common"
 
 	"github.com/burugo/thing"
 	redisCache "github.com/burugo/thing/drivers/cache/redis"
