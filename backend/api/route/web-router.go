@@ -3,8 +3,8 @@ package route
 import (
 	"embed"
 	"net/http"
-	"one-mcp/backend/api/middleware"
-	"one-mcp/backend/common"
+	"toWers/backend/api/middleware"
+	"toWers/backend/common"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"

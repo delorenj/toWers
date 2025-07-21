@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"one-mcp/backend/common"
-	"one-mcp/backend/model"
-	"one-mcp/backend/service"
+	"toWers/backend/common"
+	"toWers/backend/model"
+	"toWers/backend/service"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

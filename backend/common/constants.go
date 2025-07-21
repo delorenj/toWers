@@ -17,7 +17,7 @@ var HomePageLink = ""
 // Any options with "Secret", "Token" in its key won't be return by GetOptions
 
 var SessionSecret = uuid.New().String()
-var SQLitePath = "data/one-mcp.db"
+var SQLitePath = "data/toWers.db"
 
 var OptionMap = make(map[string]string)
 

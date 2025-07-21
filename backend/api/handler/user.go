@@ -3,11 +3,11 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"one-mcp/backend/common"
-	"one-mcp/backend/model"
+	"toWers/backend/common"
+	"toWers/backend/model"
 	"strconv"
 
-	"one-mcp/backend/common/i18n"
+	"toWers/backend/common/i18n"
 
 	"github.com/burugo/thing"
 	"github.com/gin-gonic/gin"

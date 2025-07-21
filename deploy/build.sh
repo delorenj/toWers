@@ -25,15 +25,15 @@ echo "Building backend for release v${VERSION}..."
 
 # Build for Linux (amd64)
 echo "Building for linux/amd64..."
-GOOS=linux GOARCH=amd64 go build -o ${RELEASE_DIR}/one-mcp-${VERSION}-linux-amd64 main.go
+GOOS=linux GOARCH=amd64 go build -o ${RELEASE_DIR}/toWers-${VERSION}-linux-amd64 main.go
 
 # Build for macOS (amd64 - Intel)
 echo "Building for darwin/amd64 (Intel)..."
-GOOS=darwin GOARCH=amd64 go build -o ${RELEASE_DIR}/one-mcp-${VERSION}-darwin-amd64 main.go
+GOOS=darwin GOARCH=amd64 go build -o ${RELEASE_DIR}/toWers-${VERSION}-darwin-amd64 main.go
 
 # Build for macOS (arm64 - Apple Silicon)
 echo "Building for darwin/arm64 (Apple Silicon)..."
-GOOS=darwin GOARCH=arm64 go build -o ${RELEASE_DIR}/one-mcp-${VERSION}-darwin-arm64 main.go
+GOOS=darwin GOARCH=arm64 go build -o ${RELEASE_DIR}/toWers-${VERSION}-darwin-arm64 main.go
 
 
 echo ""

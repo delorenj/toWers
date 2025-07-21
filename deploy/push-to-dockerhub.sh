@@ -2,7 +2,7 @@
 set -e
 
 VERSION=$(cat ../VERSION)
-DOCKER_REPO="buru2020/one-mcp"
+DOCKER_REPO="buru2020/toWers"
 
 echo "Setting up Docker Buildx for multi-architecture builds..."
 

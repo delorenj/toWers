@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"one-mcp/backend/common"
-	"one-mcp/backend/model"
+	"toWers/backend/common"
+	"toWers/backend/model"
 
 	"github.com/mark3labs/mcp-go/client"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -436,7 +436,7 @@ func InstallNPMPackage(ctx context.Context, packageName, version, command string
 	initRequest := mcp.InitializeRequest{}
 	initRequest.Params.ProtocolVersion = mcp.LATEST_PROTOCOL_VERSION
 	initRequest.Params.ClientInfo = mcp.Implementation{
-		Name:    "one-mcp",
+		Name:    "toWers",
 		Version: "1.0.0", // This should be dynamic
 	}
 	initRequest.Params.Capabilities = mcp.ClientCapabilities{}

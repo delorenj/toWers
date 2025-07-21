@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"one-mcp/backend/common"
-	"one-mcp/backend/model"
+	"toWers/backend/common"
+	"toWers/backend/model"
 
 	"github.com/burugo/thing"
 	"github.com/golang-jwt/jwt/v5"
@@ -30,7 +30,7 @@ func GenerateToken(user *model.User) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour * 7)), // Token expires in 7 days
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-			Issuer:    "one-mcp",
+			Issuer:    "toWers",
 			Subject:   user.Username,
 		},
 	}
@@ -57,7 +57,7 @@ func GenerateRefreshToken(user *model.User) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(7 * 24 * time.Hour)), // Refresh token expires in 7 days
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-			Issuer:    "one-mcp",
+			Issuer:    "toWers",
 			Subject:   user.Username,
 		},
 	}

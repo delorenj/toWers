@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors" // Added for logging
-	"one-mcp/backend/common"
+	"toWers/backend/common"
 	"strconv"
 	"strings"
 
@@ -11,7 +11,7 @@ import (
 )
 
 // User represents the user model in the database.
-// Adapted from one-mcp/backend and example. Removed Token field (using JWT).
+// Adapted from toWers/backend and example. Removed Token field (using JWT).
 // Sensitive fields like Password should not be included in API responses.
 type User struct {
 	thing.BaseModel

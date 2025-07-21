@@ -15,7 +15,7 @@ Always use: `go test -v ./backend/api/handler/... | grep FAIL`
 ## Project Startup and Logging Rules
 
 **Service Startup:**
-- Use `bash ./run.sh` to start the one-mcp service
+- Use `bash ./run.sh` to start the toWers service
 - This script automatically loads .env, ensures PATH, kills port 3000 processes, and starts the Go backend in background
 - Logs are output to `backend.log`
 
@@ -24,8 +24,8 @@ Always use: `go test -v ./backend/api/handler/... | grep FAIL`
 - Use `tail -n 50 backend.log` to view recent log entries
 - Use `grep "ERROR\|WARN\|Failed" backend.log` to filter error messages
 **Service Management:**
-- Use `pkill -f one-mcp` to stop the service
-- Check service status with `ps aux | grep one-mcp | grep -v grep`
+- Use `pkill -f toWers` to stop the service
+- Check service status with `ps aux | grep toWers | grep -v grep`
 - API status endpoint: `curl "http://localhost:3003/api/status"`
 
 
@@ -40,7 +40,7 @@ Always use: `go test -v ./backend/api/handler/... | grep FAIL`
 ## 根目录 (`/`)
 - `backend.log` - 后端服务的运行日志文件。包含服务启动、运行过程中的各种信息，用于调试和监控。
 - `data/` - 数据存储目录。通常包含数据库文件、缓存数据或其它持久化数据。
-- `one-mcp` - 主应用程序可执行文件（Go语言编译产物）。
+- `toWers` - 主应用程序可执行文件（Go语言编译产物）。
 - `.git/` - Git版本控制系统目录。包含所有版本历史和配置信息。
 - `.cursor/` - Cursor IDE的配置文件和工作区特定文件，包括Agent的规则和任务文件。
   - `rules/` - 存放Agent的规则文件，如 `tdd.mdc` 和 `plan-mode.mdc`。

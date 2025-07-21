@@ -16,8 +16,8 @@ This guide provides comprehensive instructions for setting up and developing the
 
 ```bash
 # Clone the repository
-git clone https://github.com/burugo/one-mcp.git
-cd one-mcp
+git clone https://github.com/burugo/toWers.git
+cd toWers
 
 # Copy environment configuration
 cp .env_example .env
@@ -27,6 +27,7 @@ cp .env_example .env
 ```
 
 The development script will:
+
 - Start the Go backend on port 3000
 - Start the React frontend dev server on port 5173 (with hot reload)
 - Watch for file changes and restart services automatically

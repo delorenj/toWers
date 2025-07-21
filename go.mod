@@ -1,4 +1,4 @@
-module one-mcp
+module toWers
 
 // +heroku goVersion go1.24
 go 1.24

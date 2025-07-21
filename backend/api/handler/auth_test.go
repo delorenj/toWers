@@ -9,8 +9,8 @@ import (
 	"os"
 	"testing"
 
-	"one-mcp/backend/common"
-	"one-mcp/backend/model"
+	"toWers/backend/common"
+	"toWers/backend/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

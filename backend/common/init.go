@@ -22,8 +22,8 @@ var UploadPath = "upload"
 
 func PrintHelp() {
 	fmt.Println("Copyright (C) 2025 Buru. All rights reserved.")
-	fmt.Println("GitHub: https://github.com/burugo/one-mcp")
-	fmt.Println("Usage: one-mcp [--port <port>] [--log-dir <log directory>] [--version] [--help]")
+	fmt.Println("GitHub: https://github.com/burugo/toWers")
+	fmt.Println("Usage: toWers [--port <port>] [--log-dir <log directory>] [--version] [--help]")
 }
 
 func init() {

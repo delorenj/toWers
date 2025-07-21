@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"one-mcp/backend/model"
+	"toWers/backend/model"
 	"testing"
 
-	"one-mcp/backend/common"
+	"toWers/backend/common"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
