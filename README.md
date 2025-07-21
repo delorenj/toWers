@@ -1,159 +1,238 @@
-# toWers - Self-Hosted MCP Admin
+# One MCP
 
-Self-hosted PluggedIn MCP administration interface for managing Model Context Protocol servers.
+<div align="center">
 
-## 🚀 Quick Start
+**One MCP** - A centralized proxy for Model Context Protocol (MCP) services
 
-### 1. Clone and Setup
+*✨ Manage, monitor, and configure your MCP services from a single interface ✨*
+
+<br />
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/burugo/one-mcp?style=flat-square)](https://goreportcard.com/report/github.com/burugo/one-mcp)
+[![Go CI](https://img.shields.io/github/actions/workflow/status/burugo/one-mcp/go.yml?style=flat-square&logo=github&label=Go%20CI)](https://github.com/burugo/one-mcp/actions)
+[![GitHub license](https://img.shields.io/github/license/burugo/one-mcp?style=flat-square)](https://github.com/burugo/one-mcp/blob/main/LICENSE)
+
+[![Go](https://img.shields.io/badge/Go-1.19+-00ADD8?style=flat-square&logo=go&logoColor=white)](https://golang.org/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://hub.docker.com/r/buru2020/one-mcp)
+
+</div>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#configuration">Configuration</a> •
+  <a href="#development">Development</a> •
+  <a href="#contributing">Contributing</a>
+</p>
+
+---
+
+## Overview
+
+One MCP is a comprehensive management platform for Model Context Protocol (MCP) services. Acting as a centralized proxy, it lets you discover, install, configure, and monitor MCP services from various providers. Built with Go and React, it offers both powerful backend capabilities and an intuitive web interface.
+
+![Screenshot](./images/dashboard.png)
+
+## Features
+
+### 🚀 **Service Management**
+- **Install & Configure**: Deploy MCP services from marketplace or custom sources
+- **Multiple Service Types**: Support for stdio, Server-Sent Events (SSE), and streamable HTTP services
+- **Environment Management**: Secure handling of service environment variables and configurations
+- **Health Monitoring**: Real-time service health checks and status monitoring
+
+### 🛒 **Service Marketplace**
+- **Discover Services**: Browse and search MCP services from various repositories
+- **One-Click Installation**: Simple installation process with automatic dependency resolution
+- **Custom Services**: Create and deploy custom MCP services with flexible configuration options
+
+### 📊 **Analytics & Monitoring**
+- **Usage Statistics**: Track service utilization and performance metrics
+- **Request Analytics**: Monitor API requests, response times, and error rates
+- **System Health**: Comprehensive system status and uptime monitoring
+
+### 👥 **User Management**
+- **Multi-User Support**: Role-based access control with admin and user roles
+- **OAuth Integration**: Login with GitHub and Google accounts
+- **Secure Authentication**: Token-based authentication with refresh token support
+
+### 🌐 **Internationalization**
+- **Multi-Language Support**: English interface
+- **Localized Content**: Fully translated user interface and error messages
+- **Language Persistence**: User language preferences saved across sessions
+
+### ⚙️ **Advanced Configuration**
+- **Environment Variables**: Flexible configuration management
+- **Database Support**: SQLite (default) with MySQL/PostgreSQL support
+- **Redis Integration**: Optional Redis support for distributed caching
+- **Docker Ready**: Full Docker support for easy deployment
+
+![Screenshot](./images/services.png)
+![Screenshot](./images/copy_config.png)
+
+## Quick Start
+
+### Using Docker (Recommended)
+
 ```bash
-git clone git@github.com:delorenj/toWers.git
-cd toWers
+# Run with Docker
+docker run --name one-mcp -d \
+  --restart always \
+  -p 3000:3000 \
+  -v $(pwd)/data:/data \
+  buru2020/one-mcp:latest
 
-# Run setup script to generate secrets
-./setup.sh
+# Access the application
+open http://localhost:3000
 ```
 
-### 2. Configure Environment
-Edit `.env` file and set your configuration:
+### Manual Installation
 
 ```bash
-# Required: Set your database URL
-DATABASE_URL=postgresql://username:password@host:5432/database_name
-
-# Required: Add your AI API keys
-ANTHROPIC_API_KEY=your-anthropic-api-key
-OPENAI_API_KEY=your-openai-api-key
-GOOGLE_API_KEY=your-google-api-key
-
-# Optional: OAuth providers
-GITHUB_ID=your-github-client-id
-GITHUB_SECRET=your-github-client-secret
-```
-
-### 3. Run the Application
-```bash
-# Using pre-built image (recommended)
-docker compose up -d
-
-# Or build locally
-# Edit docker-compose.yml to uncomment build section
-docker compose up -d --build
-```
-
-## 📡 Access
-
-- **Web Interface**: http://localhost:12005
-- **API Endpoint**: http://localhost:12005/api/mcp-servers
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-All configuration is done via the `.env` file:
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | ✅ |
-| `NEXTAUTH_SECRET` | Authentication secret (auto-generated) | ✅ |
-| `ANTHROPIC_API_KEY` | Anthropic API key | ✅ |
-| `OPENAI_API_KEY` | OpenAI API key | ✅ |
-| `GOOGLE_API_KEY` | Google API key | ✅ |
-| `GITHUB_ID` | GitHub OAuth client ID | ❌ |
-| `GITHUB_SECRET` | GitHub OAuth client secret | ❌ |
-
-### Database Setup
-
-The application requires a PostgreSQL database. It will automatically run migrations on startup.
-
-```sql
--- Create database (if needed)
-CREATE DATABASE pluggedin;
-```
-
-## 🐳 Container Registry
-
-- **Image**: `ghcr.io/delorenj/mcp-admin:latest`
-- **Platforms**: linux/amd64, linux/arm64
-- **Auto-built**: On push to main branch via GitHub Actions
-
-## 🛠️ Development
-
-### Local Development
-```bash
-# Install dependencies
-pnpm install
+# Clone the repository
+git clone https://github.com/burugo/one-mcp.git
+cd one-mcp
 
 # Set up environment
-./setup.sh
+cp .env_example .env
 
-# Run development server
-pnpm dev
+bash ./run.sh
 ```
 
-### Building Container
-```bash
-# Build locally
-./build.sh
+**Default Login**: Username `root`, Password `123456`
 
-# Build with custom tag
-./build.sh v1.0.0
+## Installation
 
-# Push to registry (requires authentication)
-docker push ghcr.io/delorenj/mcp-admin:latest
-```
+### Prerequisites
 
-## 📦 Container Features
+- **Go**: Version 1.19 or later
+- **Node.js**: Version 16 or later  
+- **Database**: SQLite (default), MySQL, or PostgreSQL
+- **Redis**: Optional
 
-- **Multi-stage build** for optimized image size
-- **Automatic database migrations** on startup
-- **Health checks** built-in
-- **Non-root user** for security
-- **Production optimized** Next.js build
+### Environment Configuration
 
-## 🔧 Management
+Create a `.env` file from the template:
 
 ```bash
-# Start service
-docker compose up -d
-
-# Stop service
-docker compose down
-
-# View logs
-docker compose logs -f
-
-# Restart service
-docker compose restart
-
-# Update to latest image
-docker compose pull && docker compose up -d
+cp .env_example .env
 ```
 
-## 🔒 Security
+Key configuration options:
 
-- **Environment Variables**: All secrets are stored in `.env` (not committed to git)
-- **Auto-generated Secrets**: Setup script generates secure random secrets
-- **Non-root Container**: Application runs as non-root user
-- **Health Checks**: Built-in container health monitoring
+```bash
+# Server Configuration
+PORT=3000
 
-## 🎯 Why toWers?
+# Database (SQLite is default, MySQL and PostgreSQL are supported)
+# SQLite(default)
+# SQLITE_PATH=/data/one-mcp.db
+# MySQL:
+# SQL_DSN=root:password@tcp(localhost:3306)/one_mcp
+# PostgreSQL:
+# SQL_DSN=postgres://username:password@localhost/database_name?sslmode=disable
 
-✅ **Portability**: Run anywhere Docker runs  
-✅ **Consistency**: Same environment everywhere  
-✅ **Simplicity**: Single `docker compose up -d` command  
-✅ **Security**: Proper secret management  
-✅ **Scalability**: Easy to deploy multiple instances  
-✅ **Version Control**: Tagged releases via GHCR  
-✅ **CI/CD Ready**: Automated builds on GitHub
+# Redis (optional, replace local cache for production environment)
+REDIS_CONN_STRING=redis://localhost:6379
 
-## 🤝 Contributing
+# GitHub API (optional, for querying npm's github homepage star count, without this, there will be rate limit issues)
+GITHUB_TOKEN=your-github-token
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test locally
-5. Submit a pull request
+### Docker Deployment
 
-## 📄 License
+```bash
+# Build the Docker image
+docker build -t one-mcp .
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+# Run with docker-compose (recommended)
+docker-compose up -d
+
+# Or run directly
+docker run -d \
+  --name one-mcp \
+  -p 3000:3000 \
+  -v ./data:/data \
+  -e PORT=3000 \
+  one-mcp
+```
+
+### Manual Deployment
+
+1. **Build the application**:
+   ```bash
+   ./deploy/build.sh
+   ```
+
+2. **Run the server**:
+   ```bash
+   ./one-mcp --port 3000
+   ```
+
+3. **Access the application**:
+   Open http://localhost:3000 in your browser
+
+## Configuration
+
+### OAuth Setup
+
+#### GitHub OAuth
+1. Create a GitHub OAuth App at https://github.com/settings/applications/new
+2. Set Homepage URL: `http://your-domain.com`
+3. Set Authorization callback URL: `http://your-domain.com/oauth/github`
+4. Configure in the application preferences
+
+#### Google OAuth
+1. Create credentials at https://console.developers.google.com/
+2. Set Authorized JavaScript origins: `http://your-domain.com`
+3. Set Authorized redirect URIs: `http://your-domain.com/oauth/google`
+4. Configure in the application preferences
+
+### Database Configuration
+
+#### SQLite (Default)
+No additional configuration required. Database file is created at `./data/one-mcp.db`.
+
+#### MySQL
+```bash
+SQL_DSN=username:password@tcp(localhost:3306)/database_name
+```
+
+#### PostgreSQL
+```bash
+SQL_DSN=postgres://username:password@localhost/database_name?sslmode=disable
+```
+
+## API Documentation
+
+The application provides RESTful APIs for all functionality:
+
+- **Base URL**: `http://localhost:3000/api`
+- **Authentication**: Bearer token (obtained via login)
+- **Content-Type**: `application/json`
+
+### Key Endpoints
+
+- `POST /api/auth/login` - User authentication
+- `GET /api/services` - List installed services
+- `POST /api/services` - Install new service
+- `GET /api/market/search` - Search marketplace
+- `GET /api/analytics/usage` - Usage statistics
+
+## Development
+
+### Development Environment
+
+```bash
+# Start development servers
+./run.sh
+
+# This will start:
+# - Backend server on :3000
+# - Frontend dev server on :5173 (with hot reload)
+```
+
+### Project Structure

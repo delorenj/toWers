@@ -1,1 +1,0 @@
-ALTER TABLE "api_keys" ADD CONSTRAINT "api_keys_key_unique_idx" UNIQUE("api_key");

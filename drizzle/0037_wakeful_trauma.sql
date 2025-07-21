@@ -1,1 +1,0 @@
-ALTER TYPE "public"."mcp_server_type" ADD VALUE 'STREAMABLE_HTTP';

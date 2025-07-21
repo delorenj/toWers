@@ -1,88 +1,80 @@
-FROM node:20-alpine AS base
+FROM node:22-slim AS builder
 
-# Install pnpm and curl for health checks
-RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
-RUN apk add --no-cache curl
+WORKDIR /build
+COPY ./frontend .
+COPY ./VERSION .
+RUN npm install
+RUN REACT_APP_VERSION=$(cat VERSION) npm run build
 
-# Install dependencies only when needed
-FROM base AS deps
-WORKDIR /app
+FROM --platform=$BUILDPLATFORM golang AS builder2
 
-# Files needed for pnpm install
-COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# 安装交叉编译工具链
+RUN apt-get update && apt-get install -y \
+    gcc-aarch64-linux-gnu \
+    gcc-x86-64-linux-gnu \
+    && rm -rf /var/lib/apt/lists/*
+
+# 根据目标架构设置交叉编译环境
+ENV GO111MODULE=on \
+    CGO_ENABLED=1 \
+    GOOS=$TARGETOS \
+    GOARCH=$TARGETARCH
+
+# 根据目标架构设置C编译器
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+    echo "Setting up for ARM64 cross-compilation"; \
+    export CC=aarch64-linux-gnu-gcc; \
+    elif [ "$TARGETARCH" = "amd64" ]; then \
+    echo "Setting up for AMD64 cross-compilation"; \
+    export CC=x86_64-linux-gnu-gcc; \
+    fi
+
+WORKDIR /build
+
+# 优化：先复制依赖文件，利用Docker缓存
+COPY go.mod go.sum ./
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+    CC=aarch64-linux-gnu-gcc go mod download; \
+    elif [ "$TARGETARCH" = "amd64" ]; then \
+    CC=x86_64-linux-gnu-gcc go mod download; \
+    else \
+    go mod download; \
+    fi
+
+# 然后复制源代码和前端构建产物
 COPY . .
+COPY --from=builder /build/dist ./frontend/dist
 
-# Disable Next.js telemetry and Sentry warnings
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV SENTRY_SUPPRESS_INSTRUMENTATION_FILE_WARNING=1
+# 最后构建
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+    CC=aarch64-linux-gnu-gcc go build -ldflags "-s -w -X 'one-mcp/common.Version=$(cat VERSION)' -extldflags '-static'" -o one-mcp; \
+    elif [ "$TARGETARCH" = "amd64" ]; then \
+    CC=x86_64-linux-gnu-gcc go build -ldflags "-s -w -X 'one-mcp/common.Version=$(cat VERSION)' -extldflags '-static'" -o one-mcp; \
+    else \
+    go build -ldflags "-s -w -X 'one-mcp/common.Version=$(cat VERSION)' -extldflags '-static'" -o one-mcp; \
+    fi
 
-RUN pnpm build
+FROM ghcr.io/astral-sh/uv:alpine
 
-# Production image with migration capability
-FROM base AS runner
-WORKDIR /app
+RUN apk update \
+    && apk upgrade \
+    && apk add --no-cache ca-certificates tzdata nodejs npm python3 git \
+    && update-ca-certificates 2>/dev/null || true
 
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV SENTRY_SUPPRESS_INSTRUMENTATION_FILE_WARNING=1
+# 创建 /data 目录
+RUN mkdir -p /data
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copy built application
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Copy standalone build
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Copy database migration files and dependencies for migrations
-COPY --from=builder /app/drizzle ./drizzle
-COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
-COPY --from=deps /app/node_modules ./node_modules
-
-# Create entrypoint script
-COPY --chown=nextjs:nodejs <<EOF /app/entrypoint.sh
-#!/bin/sh
-set -e
-
-# Run migrations if DATABASE_URL is set
-if [ -n "\$DATABASE_URL" ]; then
-  echo "Running database migrations..."
-  npx drizzle-kit migrate || echo "Migration failed, continuing..."
-fi
-
-# Start the application
-exec node server.js
-EOF
-
-RUN chmod +x /app/entrypoint.sh
-
-USER nextjs
-
-EXPOSE 3000
-
+# Default configuration - can be overridden at runtime
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
+ENV SQLITE_PATH=/data/one-mcp.db
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
-
-# Labels for better container management
-LABEL org.opencontainers.image.title="toWers"
-LABEL org.opencontainers.image.description="Self-hosted MCP administration interface"
-LABEL org.opencontainers.image.source="https://github.com/delorenj/toWers"
-LABEL org.opencontainers.image.vendor="DeLorenj"
-
-CMD ["/app/entrypoint.sh"]
+COPY --from=builder2 /build/one-mcp /
+COPY --from=builder2 /build/backend/locales /backend/locales
+EXPOSE 3000
+WORKDIR /data
+ENTRYPOINT ["/one-mcp"]
