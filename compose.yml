@@ -1,6 +1,7 @@
 services:
   toWers:
-    image: delorenj/toWers:latest
+    build: .
+    image: delorenj/towers-mcp-proxy
     container_name: toWers
     restart: unless-stopped
     ports:
@@ -26,3 +27,4 @@ networks:
 
 volumes:
   toWers-data:
+    name: toWers-data
