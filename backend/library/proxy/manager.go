@@ -13,17 +13,17 @@ import (
 )
 
 var (
-	// ErrServiceAlreadyExists 表示服务已经存在
+	// ErrServiceAlreadyExists indicates service already exists
 	ErrServiceAlreadyExists = errors.New("service already exists")
-	// ErrServiceNotFound 表示服务不存在
+	// ErrServiceNotFound indicates service not found
 	ErrServiceNotFound = errors.New("service not found")
-	// ErrServiceStartFailed 表示服务启动失败
+	// ErrServiceStartFailed indicates service start failed
 	ErrServiceStartFailed = errors.New("service start failed")
-	// ErrServiceStopFailed 表示服务停止失败
+	// ErrServiceStopFailed indicates service stop failed
 	ErrServiceStopFailed = errors.New("service stop failed")
 )
 
-// ServiceManager 管理所有MCP服务的实例
+// ServiceManager manages all MCP service instances
 type ServiceManager struct {
 	services      map[int64]Service
 	mutex         sync.RWMutex
@@ -31,11 +31,11 @@ type ServiceManager struct {
 	initialized   bool
 }
 
-// globalManager 是全局服务管理器实例
+// globalManager is the global service manager instance
 var globalManager *ServiceManager
 var managerOnce sync.Once
 
-// GetServiceManager 返回全局服务管理器实例
+// GetServiceManager returns the global service manager instance
 func GetServiceManager() *ServiceManager {
 	managerOnce.Do(func() {
 		globalManager = &ServiceManager{
@@ -47,19 +47,19 @@ func GetServiceManager() *ServiceManager {
 	return globalManager
 }
 
-// Initialize 初始化服务管理器
+// Initialize initializes the service manager
 func (m *ServiceManager) Initialize(ctx context.Context) error {
 	if m.initialized {
 		return nil
 	}
 
-	// 启动健康检查
+	// Start health checker
 	m.healthChecker.Start()
 
-	// 启动自动重启守护线程
+	// Start auto-restart daemon thread
 	m.StartDaemon()
 
-	// 加载并注册所有启用的服务
+	// Load and register all enabled services
 	services, err := model.GetEnabledServices()
 	if err != nil {
 		return fmt.Errorf("failed to load enabled services: %w", err)
@@ -68,7 +68,7 @@ func (m *ServiceManager) Initialize(ctx context.Context) error {
 	for _, mcpService := range services {
 		if err := m.RegisterService(ctx, mcpService); err != nil {
 			log.Printf("Failed to register service %s (ID: %d): %v", mcpService.Name, mcpService.ID, err)
-			// 继续注册其他服务
+			// Continue registering other services
 			continue
 		}
 	}
@@ -77,12 +77,12 @@ func (m *ServiceManager) Initialize(ctx context.Context) error {
 	return nil
 }
 
-// Shutdown 关闭服务管理器
+// Shutdown shuts down the service manager
 func (m *ServiceManager) Shutdown(ctx context.Context) error {
-	// 停止健康检查
+	// Stop health checker
 	m.healthChecker.Stop()
 
-	// 停止所有服务
+	// Stop all services
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
 
@@ -90,44 +90,44 @@ func (m *ServiceManager) Shutdown(ctx context.Context) error {
 		if service.IsRunning() {
 			if err := service.Stop(ctx); err != nil {
 				log.Printf("Error stopping service %s (ID: %d): %v", service.Name(), service.ID(), err)
-				// 继续停止其他服务
+				// Continue stopping other services
 			}
 		}
 	}
 
-	// 清空服务列表
+	// Clear service list
 	m.services = make(map[int64]Service)
 	m.initialized = false
 
 	return nil
 }
 
-// RegisterService 注册一个服务到管理器
+// RegisterService registers a service to the manager
 func (m *ServiceManager) RegisterService(ctx context.Context, mcpService *model.MCPService) error {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
 
-	// 检查服务是否已经存在
+	// Check if service already exists
 	if _, exists := m.services[mcpService.ID]; exists {
 		return ErrServiceAlreadyExists
 	}
 
-	// 创建服务实例
+	// Create service instance
 	service, err := ServiceFactory(mcpService)
 	if err != nil {
 		return fmt.Errorf("failed to create service instance: %w", err)
 	}
 
-	// 注册服务
+	// Register service
 	m.services[mcpService.ID] = service
 
-	// 注册到健康检查器
+	// Register to health checker
 	m.healthChecker.RegisterService(service)
 
-	// 如果服务配置为默认启用，则启动服务
+	// If service is configured to be enabled by default, start it
 	if mcpService.DefaultOn && mcpService.Enabled {
 		if err := service.Start(ctx); err != nil {
-			// 启动失败，但仍然保留注册
+			// Start failed, but keep registration
 			log.Printf("Failed to start service %s (ID: %d): %v", mcpService.Name, mcpService.ID, err)
 		}
 	}
@@ -135,7 +135,7 @@ func (m *ServiceManager) RegisterService(ctx context.Context, mcpService *model.
 	return nil
 }
 
-// UnregisterService 从管理器移除一个服务
+// UnregisterService removes a service from the manager
 func (m *ServiceManager) UnregisterService(ctx context.Context, serviceID int64) error {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
@@ -145,21 +145,21 @@ func (m *ServiceManager) UnregisterService(ctx context.Context, serviceID int64)
 		return ErrServiceNotFound
 	}
 
-	// 如果服务正在运行，先停止它
+	// If service is running, stop it first
 	if service.IsRunning() {
 		if err := service.Stop(ctx); err != nil {
 			return fmt.Errorf("failed to stop service: %w", err)
 		}
 	}
 
-	// 从健康检查器中移除
+	// Remove from health checker
 	m.healthChecker.UnregisterService(serviceID)
 
-	// 从健康状态缓存中移除
+	// Remove from health status cache
 	cacheManager := GetHealthCacheManager()
 	cacheManager.DeleteServiceHealth(serviceID)
 
-	// 从服务列表中移除
+	// Remove from service list
 	delete(m.services, serviceID)
 
 	return nil

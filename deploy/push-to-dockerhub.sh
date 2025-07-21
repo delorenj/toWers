@@ -6,14 +6,14 @@ DOCKER_REPO="buru2020/one-mcp"
 
 echo "Setting up Docker Buildx for multi-architecture builds..."
 
-# 检查 Docker 登录状态
+# Check Docker login status
 echo "Checking Docker login status..."
 if ! docker info > /dev/null 2>&1; then
     echo "Error: Docker daemon is not running or not accessible"
     exit 1
 fi
 
-# 验证 Docker Hub 登录
+# Verify Docker Hub login
 echo "Verifying Docker Hub authentication..."
 if ! docker system info | grep -q "Username:"; then
     echo "Warning: Not logged in to Docker Hub"
@@ -28,11 +28,11 @@ if ! docker system info | grep -q "Username:"; then
     fi
 fi
 
-# 清理可能的缓存问题
+# Clean up possible cache issues
 # echo "Cleaning up Docker buildx cache..."
 # docker buildx prune -f || true
 
-# 创建并使用多架构构建器（如果不存在）
+# Create and use multi-architecture builder (if not exists)
 if ! docker buildx ls | grep -q multiarch; then
     echo "Creating multiarch builder..."
     docker buildx create --use --name multiarch --driver docker-container
@@ -41,14 +41,14 @@ else
     docker buildx use multiarch
 fi
 
-# 确保构建器正在运行
+# Ensure builder is running
 echo "Inspecting and starting builder..."
 docker buildx inspect --bootstrap
 
 echo "Building and pushing multi-architecture images..."
 echo "Building version: $VERSION"
 
-# 构建并推送多架构镜像（同时推送 latest 和版本标签）
+# Build and push multi-architecture images (push both latest and version tags)
 docker buildx build \
     --platform linux/amd64,linux/arm64 \
     -t $DOCKER_REPO:latest \

@@ -123,7 +123,7 @@ func setupGracefulShutdown() {
 		<-c
 		common.SysLog("Shutting down...")
 
-		// 关闭服务管理器
+		// Shutdown service manager
 		serviceManager := proxy.GetServiceManager()
 		if err := serviceManager.Shutdown(context.Background()); err != nil {
 			common.SysLog("Error shutting down service manager: " + err.Error())
@@ -131,7 +131,7 @@ func setupGracefulShutdown() {
 			common.SysLog("Service manager shut down successfully")
 		}
 
-		// 关闭其他资源...
+		// Shutdown other resources...
 
 		os.Exit(0)
 	}()

@@ -112,11 +112,11 @@ func (hc *HealthChecker) checkAllServices() {
 	}
 }
 
-// checkService 检查单个服务的健康状态
+// checkService checks the health status of a single service
 func (hc *HealthChecker) checkService(service Service) {
 	timeout := service.HealthCheckTimeout()
 	if timeout <= 0 {
-		timeout = 10 * time.Second // 如果服务未指定或指定无效值，则使用默认超时10秒
+		timeout = 10 * time.Second // Use default timeout of 10 seconds if service doesn't specify or specifies invalid value
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -125,7 +125,7 @@ func (hc *HealthChecker) checkService(service Service) {
 	health, err := service.CheckHealth(ctx)
 	if err != nil {
 		log.Printf("Error checking health for service %s (ID: %d) with timeout %v: %v", service.Name(), service.ID(), timeout, err)
-		// 错误情况下仍然更新健康状态为异常
+		// Update health status to unhealthy on error
 		health = &ServiceHealth{
 			Status:       StatusUnhealthy,
 			LastChecked:  time.Now(),
@@ -133,34 +133,34 @@ func (hc *HealthChecker) checkService(service Service) {
 		}
 	}
 
-	// 更新缓存中的健康状态
+	// Update health status in cache
 	hc.updateCacheHealthStatus(service.ID(), health)
 }
 
-// updateCacheHealthStatus 更新缓存中的服务健康状态
+// updateCacheHealthStatus updates the service health status in cache
 func (hc *HealthChecker) updateCacheHealthStatus(serviceID int64, health *ServiceHealth) {
 	hc.servicesMu.Lock()
 	lastUpdate := hc.lastUpdateTimes[serviceID]
 	hc.servicesMu.Unlock()
 
-	// 如果上次更新时间距现在不到5秒，则跳过更新以减少频繁操作
+	// Skip update if last update was less than 5 seconds ago to reduce frequent operations
 	if time.Since(lastUpdate) < 5*time.Second {
 		return
 	}
 
-	// 获取全局健康状态缓存管理器
+	// Get global health status cache manager
 	cacheManager := GetHealthCacheManager()
 
-	// 将健康状态存储到缓存中
+	// Store health status in cache
 	cacheManager.SetServiceHealth(serviceID, health)
 
-	// 更新最后更新时间
+	// Update last update time
 	hc.servicesMu.Lock()
 	hc.lastUpdateTimes[serviceID] = time.Now()
 	hc.servicesMu.Unlock()
 }
 
-// ForceCheckService 强制立即检查指定服务的健康状态
+// ForceCheckService forces an immediate health check for the specified service
 func (hc *HealthChecker) ForceCheckService(serviceID int64) (*ServiceHealth, error) {
 	hc.servicesMu.RLock()
 	service, exists := hc.services[serviceID]
@@ -238,7 +238,7 @@ func (hc *HealthChecker) ForceCheckService(serviceID int64) (*ServiceHealth, err
 	return returnedHealthFromService, nil
 }
 
-// GetServiceHealth 获取指定服务的最新健康状态
+// GetServiceHealth gets the latest health status of the specified service
 func (hc *HealthChecker) GetServiceHealth(serviceID int64) (*ServiceHealth, error) {
 	hc.servicesMu.RLock()
 	service, exists := hc.services[serviceID]
@@ -251,5 +251,5 @@ func (hc *HealthChecker) GetServiceHealth(serviceID int64) (*ServiceHealth, erro
 	return service.GetHealth(), nil
 }
 
-// ErrServiceNotRegistered 表示服务未注册到健康检查管理器
+// ErrServiceNotRegistered indicates the service is not registered to the health checker
 var ErrServiceNotRegistered = errors.New("service not registered to health checker")
