@@ -3,8 +3,8 @@ FROM node:22-slim AS builder
 WORKDIR /build
 COPY ./frontend .
 COPY ./VERSION .
-RUN pnpm install
-RUN REACT_APP_VERSION=$(cat VERSION) pnpm run build
+RUN npm install
+RUN REACT_APP_VERSION=$(cat VERSION) npm run build
 
 FROM --platform=$BUILDPLATFORM golang AS builder2
 
