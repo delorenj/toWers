@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-One MCP is a centralized management platform for Model Context Protocol (MCP) services. It provides a web interface to discover, install, configure, and monitor MCP services with enterprise features like multi-tenancy, health monitoring, and analytics.
+toWers is a centralized management platform for Model Context Protocol (MCP) services. It provides a web interface to discover, install, configure, and monitor MCP services with enterprise features like multi-tenancy, health monitoring, and analytics.
 
 ## Development Commands
 

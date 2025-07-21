@@ -9,7 +9,7 @@ import (
 
 var StartTime = time.Now().Unix() // unit: second
 var Version = "v0.0.1"            // this hard coding will be replaced automatically when building, no need to manually change
-var SystemName = "One MCP"
+var SystemName = "toWers"
 var ServerAddress = "http://localhost:3000"
 var Footer = ""
 var HomePageLink = ""

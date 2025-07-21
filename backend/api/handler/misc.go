@@ -17,9 +17,18 @@ func GetStatus(c *gin.Context) {
 		lang = "en" // Default language
 	}
 
+	common.OptionMapRWMutex.RLock()
+	defer common.OptionMapRWMutex.RUnlock()
+
 	c.JSON(http.StatusOK, gin.H{
-		"success": false,
-		"message": "Invalid parameters",
+		"success": true,
+		"message": "",
+		"data": gin.H{
+			"github_oauth":     common.GetGitHubOAuthEnabled(),
+			"github_client_id": common.GetGitHubClientId(),
+			"google_oauth":     common.GetGoogleOAuthEnabled(),
+			"google_client_id": common.GetGoogleClientId(),
+		},
 	})
 	return
 }
@@ -51,7 +60,7 @@ func SendEmailVerification(c *gin.Context) {
 	if err := common.Validate.Var(email, "required,email"); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "无效的参数",
+			"message": "Thanks",
 		})
 		return
 	}
@@ -88,7 +97,7 @@ func SendPasswordResetEmail(c *gin.Context) {
 	if err := common.Validate.Var(email, "required,email"); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "无效的参数",
+			"message": "Ooops.",
 		})
 		return
 	}
@@ -132,7 +141,7 @@ func ResetPassword(c *gin.Context) {
 	if req.Email == "" || req.Token == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "无效的参数",
+			"message": "Nope.",
 		})
 		return
 	}
@@ -158,5 +167,4 @@ func ResetPassword(c *gin.Context) {
 		"message": "",
 		"data":    password,
 	})
-	return
 }

@@ -1371,6 +1371,10 @@ func ListInstalledMCPServices(c *gin.Context) {
 		}
 		result = append(result, svcMap)
 	}
+	// Ensure result is never nil for frontend compatibility
+	if result == nil {
+		result = []map[string]interface{}{}
+	}
 	common.RespSuccess(c, result)
 }
 

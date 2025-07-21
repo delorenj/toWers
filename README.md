@@ -1,8 +1,8 @@
-# One MCP
+# toWers
 
 <div align="center">
 
-**One MCP** - A centralized proxy for Model Context Protocol (MCP) services
+**toWers** - A centralized proxy for Model Context Protocol (MCP) services
 
 _✨ Manage, monitor, and configure your MCP services from a single interface ✨_
 
@@ -32,7 +32,7 @@ _✨ Manage, monitor, and configure your MCP services from a single interface �
 
 ## Overview
 
-One MCP is a comprehensive management platform for Model Context Protocol (MCP) services. Acting as a centralized proxy, it lets you discover, install, configure, and monitor MCP services from various providers. Built with Go and React, it offers both powerful backend capabilities and an intuitive web interface.
+toWers is a comprehensive management platform for Model Context Protocol (MCP) services. Acting as a centralized proxy, it lets you discover, install, configure, and monitor MCP services from various providers. Built with Go and React, it offers both powerful backend capabilities and an intuitive web interface.
 
 ![Screenshot](./images/dashboard.png)
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Building One MCP Docker image..."
+echo "Building toWers Docker image..."
 docker build -t toWers:$(cat VERSION) .
 docker tag toWers:$(cat VERSION) toWers:latest
 
